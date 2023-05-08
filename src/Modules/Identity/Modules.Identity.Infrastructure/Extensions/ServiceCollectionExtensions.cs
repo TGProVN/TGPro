@@ -2,8 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Identity.Core.Abstractions;
+using Modules.Identity.Core.Abstractions.Services;
 using Modules.Identity.Core.Entities;
 using Modules.Identity.Infrastructure.Contexts;
+using Modules.Identity.Infrastructure.Services;
 using Shared.Infrastructure.Extensions;
 
 namespace Modules.Identity.Infrastructure.Extensions;
@@ -39,5 +41,12 @@ public static class ServiceCollectionExtensions
             provider => provider.GetService<AppIdentityDbContext>() ??
                         throw new NullReferenceException("Could not get AppIdentityDbContext service!")
         );
+        
+        services.AddIdentityService();
+    }
+    
+    private static void AddIdentityService(this IServiceCollection services)
+    {
+        services.AddTransient<IAuthenticationService, AuthenticationService>();
     }
 }
