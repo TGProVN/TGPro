@@ -1,121 +1,91 @@
-﻿using Shared.Core.Abstractions;
+﻿using Microsoft.AspNetCore.Mvc;
+using Shared.Core.Abstractions;
 
 namespace Shared.Core.Wrapper;
 
-public class Result : IResult
+public class Result<T> : IResult<T>
 {
+
+    public Result(
+        bool succeeded,
+        string? message = default,
+        T? data = default,
+        IList<string>? errors = default
+    ) : this(succeeded, message, data)
+    {
+        if (errors is not null && errors.Any())
+        {
+            Errors = errors;
+        }
+    }
+
+    private Result(bool succeeded, string? message = default, T? data = default)
+    {
+        Message = message;
+        Succeeded = succeeded;
+        Data = data;
+        Errors = new List<string>();
+    }
     public string? Message { get; set; }
     public bool Succeeded { get; set; }
-    public IList<string?> Errors { get; set; } = new List<string?>();
-
-    public static IResult Fail(string? message = null, IList<string?>? errors = null)
-    {
-        var result = new Result {
-            Succeeded = false
-        };
-
-        if (!String.IsNullOrEmpty(message))
-        {
-            result.Message = message;
-        }
-
-        if (errors is not null && errors.Any())
-        {
-            result.Errors = errors;
-        }
-
-        return result;
-    }
-
-    public static Task<IResult> FailAsync(string? message = null, IList<string?>? errors = null)
-    {
-        return Task.FromResult(Fail(message, errors));
-    }
-
-    public static IResult Success(string? message = null)
-    {
-        if (String.IsNullOrEmpty(message))
-        {
-            return new Result { Succeeded = true };
-        }
-
-        return new Result {
-            Message = message,
-            Succeeded = true
-        };
-    }
-
-    public static Task<IResult> SuccessAsync(string? message = null)
-    {
-        return Task.FromResult(Success(message));
-    }
+    public T? Data { get; set; }
+    public IList<string> Errors { get; set; }
 }
 
-public class Result<T> : Result, IResult<T>
+public class HttpResult<T> : IHttpResult<T>
 {
-    public T? Data { get; private init; }
+    public IResult<T>? Value { get; set; }
+    public int StatusCode { get; set; }
 
-    public new static Result<T> Fail(string? message = null, IList<string?>? errors = null)
+    public async Task ExecuteResultAsync(ActionContext context)
     {
-        var result = new Result<T> {
-            Succeeded = false
+        var objectResult = new ObjectResult(Value) {
+            StatusCode = StatusCode
         };
 
-        if (!String.IsNullOrEmpty(message))
-        {
-            result.Message = message;
-        }
-
-        if (errors is not null && errors.Any())
-        {
-            result.Errors = errors;
-        }
-
-        return result;
+        await objectResult.ExecuteResultAsync(context);
     }
 
-    public new static Task<Result<T>> FailAsync(string? message = null, IList<string?>? errors = null)
+    public static IHttpResult<T> Fail(
+        int statusCode,
+        string? message = default,
+        IList<string>? errors = default
+    )
     {
-        return Task.FromResult(Fail(message, errors));
-    }
+        var value = new Result<T>(false, message, default, errors);
 
-    public new static Result<T> Success(string? message = null)
-    {
-        if (String.IsNullOrEmpty(message))
-        {
-            return new Result<T> { Succeeded = true };
-        }
-
-        return new Result<T> {
-            Message = message,
-            Succeeded = true
+        return new HttpResult<T> {
+            Value = value,
+            StatusCode = statusCode
         };
     }
 
-    public static Result<T> Success(T data, string? message = null)
+    public static Task<IHttpResult<T>> FailAsync(
+        int statusCode,
+        string? message = default,
+        IList<string>? errors = default
+    )
     {
-        if (String.IsNullOrEmpty(message))
-        {
-            return new Result<T> {
-                Succeeded = true,
-                Data = data
-            };
-        }
+        return Task.FromResult(Fail(statusCode, message, errors));
+    }
 
-        return new Result<T> {
-            Message = message,
-            Succeeded = true,
-            Data = data
+    public static IHttpResult<T> Success(int statusCode, T? data, string? message = default)
+    {
+        var value = new Result<T>(true, message, data);
+
+        return new HttpResult<T> {
+            Value = value,
+            StatusCode = statusCode
         };
     }
 
-    public new static Task<Result<T>> SuccessAsync(string? message = null)
+    public static Task<IHttpResult<T>> SuccessAsync(int statusCode, string? message = default)
     {
-        return Task.FromResult(Success(message));
+        return Task.FromResult(Success(statusCode, default, message));
     }
 
-    public static Task<Result<T>> SuccessAsync(T data, string? message = null)
+    public static Task<IHttpResult<T>> SuccessAsync(int statusCode, T data, string? message = default)
     {
-        return Task.FromResult(Success(data, message));
+        return Task.FromResult(Success(statusCode, data, message));
     }
 }

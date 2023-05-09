@@ -3,7 +3,7 @@ using Shared.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
-IServiceCollection services = builder.Services;
+var services = builder.Services;
 
 services.AddSharedInfrastructure();
 services.AddSwagger();
@@ -15,8 +15,8 @@ services.Configure<RouteOptions>(options => {
     options.LowercaseUrls = true;
 });
 
-WebApplication app = builder.Build();
-IWebHostEnvironment env = app.Environment;
+var app = builder.Build();
+var env = app.Environment;
 
 app.UseHttpsRedirection();
 app.UseExceptionHandling(env);

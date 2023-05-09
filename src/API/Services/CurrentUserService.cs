@@ -9,6 +9,6 @@ public class CurrentUserService : ICurrentUserService
     {
         UserId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
-    
+
     public string? UserId { get; }
 }

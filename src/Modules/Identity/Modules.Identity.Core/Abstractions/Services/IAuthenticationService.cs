@@ -6,6 +6,7 @@ namespace Modules.Identity.Core.Abstractions.Services;
 
 public interface IAuthenticationService
 {
-    Task<IResult<TokenResponse?>> SignIn(LoginRequest request);
-    Task<IResult<TokenResponse?>> SignInWithGoogle();
+    Task<IHttpResult<TokenResponse?>> SignIn(LoginRequest request);
+    Task<IHttpResult<TokenResponse?>> SignInWithGoogle();
+    Task<IHttpResult<string>> Test();
 }

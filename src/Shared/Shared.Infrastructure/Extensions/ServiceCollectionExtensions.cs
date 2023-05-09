@@ -10,10 +10,10 @@ public static class ServiceCollectionExtensions
     {
         services.AddControllers()
                 .ConfigureApplicationPartManager(manager => {
-                     manager.FeatureProviders.Add(new InternalControllerFeatureProvider()); 
+                     manager.FeatureProviders.Add(new InternalControllerFeatureProvider());
                  });
     }
-    
+
     public static IServiceCollection AddDatabaseContext<T>(this IServiceCollection services, string connectionString)
         where T : DbContext
     {
@@ -22,10 +22,10 @@ public static class ServiceCollectionExtensions
                 sqlOptionsBuilder.MigrationsAssembly(typeof(T).Assembly.FullName);
             });
         });
-        
+
         using var scope = services.BuildServiceProvider().CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<T>();
-        
+
         dbContext.Database.Migrate();
 
         return services;

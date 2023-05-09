@@ -1,10 +1,12 @@
 ### Build
+
 ```bash
 dotnet restore
 dotnet build
 ```
 
 ### Migration
+
 ```bash
 dotnet tool install --global dotnet-ef
 dotnet restore
@@ -14,6 +16,7 @@ dotnet ef migrations add "Initial Identity" -s ./API -p ./Modules/Identity/Modul
 ```
 
 ### Docker
+
 ```bash
 dotnet dev-certs https -ep PATH
 dotnet dev-certs https --trust
