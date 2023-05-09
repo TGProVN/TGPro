@@ -8,22 +8,10 @@ namespace Shared.Infrastructure.Contexts;
 
 public abstract class ModuleDbContext : AuditableDbContext, IModuleDbContext
 {
+
+    protected ModuleDbContext(DbContextOptions options) : base(options) {}
     protected abstract string? Schema { get; }
     protected string? UserId { get; init; }
-    
-    protected ModuleDbContext(DbContextOptions options) : base(options)
-    { }
-    
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        if (!string.IsNullOrWhiteSpace(Schema))
-        {
-            builder.HasDefaultSchema(Schema);
-        }
-        
-        base.OnModelCreating(builder);
-        //builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-    }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -31,7 +19,7 @@ public abstract class ModuleDbContext : AuditableDbContext, IModuleDbContext
         {
             return await base.SaveChangesAsync(true, cancellationToken);
         }
-        
+
         foreach (var entry in ChangeTracker.Entries<IAuditableEntity>().ToList())
         {
             switch (entry.State)
@@ -56,29 +44,39 @@ public abstract class ModuleDbContext : AuditableDbContext, IModuleDbContext
 
         return await base.SaveChangesAsync(UserId, cancellationToken);
     }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        if (!string.IsNullOrWhiteSpace(Schema))
+        {
+            builder.HasDefaultSchema(Schema);
+        }
+
+        base.OnModelCreating(builder);
+        //builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+    }
 }
 
 public abstract class ModuleDbContext<TRole, TRoleClaim, TUser, TUserToken>
     : IdentityDbContext<TUser, TRole, string, IdentityUserClaim<string>,
-                        IdentityUserRole<string>, IdentityUserLogin<string>,
-                        TRoleClaim, TUserToken>, IModuleDbContext
+          IdentityUserRole<string>, IdentityUserLogin<string>,
+          TRoleClaim, TUserToken>, IModuleDbContext
     where TUser : IdentityUser<string>
     where TRole : IdentityRole
     where TRoleClaim : IdentityRoleClaim<string>
     where TUserToken : IdentityUserToken<string>
 {
-    protected ModuleDbContext(DbContextOptions options) : base(options)
-    { }
-    
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        builder.HasDefaultSchema("Identity");
-        
-        base.OnModelCreating(builder);
-    }
+    protected ModuleDbContext(DbContextOptions options) : base(options) {}
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return await base.SaveChangesAsync(true, cancellationToken);
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.HasDefaultSchema("Identity");
+
+        base.OnModelCreating(builder);
     }
 }

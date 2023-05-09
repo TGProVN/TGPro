@@ -7,8 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Shared\Shared.Infrastructure\Shared.Infrastructure.csproj" />
-      <ProjectReference Include="..\Modules.Identity.Core\Modules.Identity.Core.csproj" />
+        <ProjectReference Include="..\..\..\Shared\Shared.Infrastructure\Shared.Infrastructure.csproj"/>
+        <ProjectReference Include="..\Modules.Identity.Core\Modules.Identity.Core.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Google.Apis.Auth" Version="1.60.0"/>
     </ItemGroup>
 
 </Project>

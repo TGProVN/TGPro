@@ -7,7 +7,7 @@ namespace Shared.Model.Audit;
 public class AuditEntry
 {
     public EntityEntry Entry;
-    
+
     public AuditEntry(EntityEntry entry)
     {
         Entry = entry;
@@ -17,7 +17,7 @@ public class AuditEntry
         TemporaryProperties = new List<PropertyEntry>();
         ChangedColumns = new List<string>();
     }
-    
+
     public string? UserId { get; init; }
     public string? TableName { get; init; }
     public AuditType AuditType { get; set; }
@@ -26,11 +26,11 @@ public class AuditEntry
     public Dictionary<string, object> NewValues { get; }
     public ICollection<PropertyEntry> TemporaryProperties { get; }
     public ICollection<string> ChangedColumns { get; }
-    
+
     public bool HasTemporaryProperties {
         get => TemporaryProperties.Any();
     }
-    
+
     public Audit ToAudit()
     {
         return new Audit {

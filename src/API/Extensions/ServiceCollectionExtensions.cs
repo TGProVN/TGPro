@@ -16,7 +16,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
         services.AddSwaggerGen(options => options.OperationFilter<SwaggerDefaultValues>());
     }
-    
+
     public static void RegisterApiVersioning(this IServiceCollection services)
     {
         services
@@ -37,7 +37,7 @@ public static class ServiceCollectionExtensions
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
     }
-    
+
     public static void RegisterAppModules(this IServiceCollection services, IConfiguration config)
     {
         services.AddCatalogModule(config);

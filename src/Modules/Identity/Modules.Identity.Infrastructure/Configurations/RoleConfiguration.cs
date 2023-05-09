@@ -14,7 +14,7 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
 
         builder.HasIndex(x => x.Name).IsUnique();
         builder.HasIndex(x => x.NormalizedName).IsUnique();
-        
+
         builder.Property(x => x.Name).IsRequired().HasColumnType("nvarchar(20)");
         builder.Property(x => x.Description).IsRequired(false).HasColumnType("nvarchar(255)");
         builder.Property(x => x.CreatedBy).IsRequired().HasColumnType("nvarchar(128)");

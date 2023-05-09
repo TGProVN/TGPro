@@ -10,7 +10,7 @@ public static class ServiceCollectionExtensions
 {
     public static void AddCatalogInfrastructure(this IServiceCollection services, IConfiguration config)
     {
-        string? connectionString = config.GetConnectionString("DefaultConnection");
+        var connectionString = config.GetConnectionString("DefaultConnection");
 
         if (String.IsNullOrWhiteSpace(connectionString))
         {
@@ -18,7 +18,7 @@ public static class ServiceCollectionExtensions
         }
 
         services.AddDatabaseContext<CatalogDbContext>(connectionString);
-        
+
         services.AddScoped<ICatalogDbContext>(
             provider => provider.GetService<CatalogDbContext>() ??
                         throw new NullReferenceException("Could not get CatalogDbContext service!")
