@@ -3,7 +3,6 @@
 namespace Modules.Catalog.Controllers;
 
 [ApiController]
-//[Route("api/v{version:apiVersion}/[controller]")]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 internal abstract class BaseCatalogController : ControllerBase
 { }
