@@ -9,7 +9,7 @@ public static class ApplicationBuilderExtensions
             app.UseDeveloperExceptionPage();
         }
     }
-    
+
     public static void ConfigureSwagger(this IApplicationBuilder app)
     {
         app.UseSwagger();

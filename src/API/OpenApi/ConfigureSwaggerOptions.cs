@@ -13,7 +13,7 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
     {
         _apiVersionDescriptionProvider = apiVersionDescriptionProvider;
     }
-    
+
     public void Configure(SwaggerGenOptions options)
     {
         foreach (var description in _apiVersionDescriptionProvider.ApiVersionDescriptions)
@@ -30,7 +30,7 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
                 Scheme = "Bearer",
                 BearerFormat = "JWT"
             });
-            
+
             options.AddSecurityRequirement(new OpenApiSecurityRequirement {
                 {
                     new OpenApiSecurityScheme {
@@ -47,7 +47,7 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
             });
         }
     }
-    
+
     private static OpenApiInfo CreateOpenApiInfo(ApiVersionDescription description)
     {
         var info = new OpenApiInfo {

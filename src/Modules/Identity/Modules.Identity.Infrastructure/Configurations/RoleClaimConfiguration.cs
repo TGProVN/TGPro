@@ -9,12 +9,12 @@ public class RoleClaimConfiguration : IEntityTypeConfiguration<RoleClaim>
     public void Configure(EntityTypeBuilder<RoleClaim> builder)
     {
         builder.ToTable("RoleClaims");
-        
+
         builder.HasOne(x => x.Role)
                .WithMany(y => y.RoleClaims)
                .HasForeignKey(x => x.RoleId)
                .OnDelete(DeleteBehavior.Cascade);
-        
+
         builder.Property(x => x.Group).IsRequired().HasColumnType("nvarchar(20)");
         builder.Property(x => x.Description).IsRequired(false).HasColumnType("nvarchar(255)");
         builder.Property(x => x.ClaimType).IsRequired().HasColumnType("nvarchar(50)");

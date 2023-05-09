@@ -2,5 +2,4 @@
 
 namespace Modules.Identity.Core.Abstractions;
 
-public interface IAppIdentityDbContext : IModuleDbContext
-{ }
+public interface IAppIdentityDbContext : IModuleDbContext {}

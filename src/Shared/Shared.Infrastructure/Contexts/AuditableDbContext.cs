@@ -6,11 +6,10 @@ namespace Shared.Infrastructure.Contexts;
 
 public class AuditableDbContext : DbContext
 {
-    protected AuditableDbContext(DbContextOptions options) : base(options)
-    { }
-    
+    protected AuditableDbContext(DbContextOptions options) : base(options) {}
+
     public DbSet<Audit>? AuditTrails { get; set; }
-    
+
     protected async Task<int> SaveChangesAsync(string? userId, CancellationToken cancellationToken = default)
     {
         if (AuditTrails is null)
@@ -18,14 +17,14 @@ public class AuditableDbContext : DbContext
             throw new NullReferenceException("DbSet<Audit> is null");
         }
 
-        List<AuditEntry> auditEntries = OnBeforeSaveChanges(userId);
-        int result = await base.SaveChangesAsync(true, cancellationToken);
+        var auditEntries = OnBeforeSaveChanges(userId);
+        var result = await base.SaveChangesAsync(true, cancellationToken);
 
         await OnAfterSaveChanges(auditEntries, cancellationToken);
 
         return result;
     }
-    
+
     private List<AuditEntry> OnBeforeSaveChanges(string? userId)
     {
         ChangeTracker.DetectChanges();
@@ -54,7 +53,7 @@ public class AuditableDbContext : DbContext
                     continue;
                 }
 
-                string propertyName = property.Metadata.Name;
+                var propertyName = property.Metadata.Name;
 
                 if (property.Metadata.IsPrimaryKey())
                 {

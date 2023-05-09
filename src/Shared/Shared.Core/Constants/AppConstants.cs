@@ -2,13 +2,21 @@
 
 public static class AppConstants
 {
+
+    public static readonly string[] GoogleScopes = {
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "https://www.googleapis.com/auth/userinfo.email"
+    };
+
     public static class Messages
     {
         public const string ValidationError = "One or more validation failures have occurred!";
         public const string InvalidCredentialInfo = "Email or password is incorrect.";
         public const string EmailUnconfirmed = "Your Email Address is not confirmed.";
+
         public const string LockedUser =
             "Your account has been locked! Please contact your website administrator for more information.";
+
         public const string MailSent = "An email has been sent. Please check your mailbox and follow the instructions.";
         public const string Unauthorized = "Unauthorized!";
         public const string Forbidden = "Forbidden!";
@@ -38,11 +46,6 @@ public static class AppConstants
         public const string User = "users";
         public const string Brand = "brands";
     }
-
-    public static readonly string[] GoogleScopes = {
-        "https://www.googleapis.com/auth/userinfo.profile",
-        "https://www.googleapis.com/auth/userinfo.email"
-    };
 
     public static class StatusCode
     {
@@ -98,7 +101,9 @@ public static class AppConstants
         public const int RequestUriTooLong = 414;
         public const int UnsupportedMediaType = 415;
         public const int RequestedRangeNotSatisfiable = 416;
+
         public const int ExpectationFailed = 417;
+
         // From https://github.com/dotnet/runtime/issues/15650:
         // "It would be a mistake to add it to .NET now. See golang/go#21326,
         // nodejs/node#14644, requests/requests#4238 and aspnet/HttpAbstractions#915".
@@ -112,7 +117,7 @@ public static class AppConstants
         public const int TooManyRequests = 429;
         public const int RequestHeaderFieldsTooLarge = 431;
         public const int UnavailableForLegalReasons = 451;
-        
+
         // Server Error 5xx
         public const int InternalServerError = 500;
         public const int NotImplemented = 501;

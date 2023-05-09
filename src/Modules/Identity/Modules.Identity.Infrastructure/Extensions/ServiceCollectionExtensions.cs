@@ -14,7 +14,7 @@ public static class ServiceCollectionExtensions
 {
     public static void AddIdentityInfrastructure(this IServiceCollection services, IConfiguration config)
     {
-        string? connectionString = config.GetConnectionString("DefaultConnection");
+        var connectionString = config.GetConnectionString("DefaultConnection");
 
         if (String.IsNullOrWhiteSpace(connectionString))
         {
@@ -41,10 +41,10 @@ public static class ServiceCollectionExtensions
             provider => provider.GetService<AppIdentityDbContext>() ??
                         throw new NullReferenceException("Could not get AppIdentityDbContext service!")
         );
-        
+
         services.AddIdentityService();
     }
-    
+
     private static void AddIdentityService(this IServiceCollection services)
     {
         services.AddTransient<IAuthenticationService, AuthenticationService>();

@@ -5,17 +5,13 @@ namespace Shared.Core.Wrapper;
 
 public class Result<T> : IResult<T>
 {
-    public string? Message { get; set; }
-    public bool Succeeded { get; set; }
-    public T? Data { get; set; }
-    public IList<string> Errors { get; set; }
 
     public Result(
         bool succeeded,
         string? message = default,
         T? data = default,
         IList<string>? errors = default
-    ) : this (succeeded, message, data)
+    ) : this(succeeded, message, data)
     {
         if (errors is not null && errors.Any())
         {
@@ -30,17 +26,20 @@ public class Result<T> : IResult<T>
         Data = data;
         Errors = new List<string>();
     }
+    public string? Message { get; set; }
+    public bool Succeeded { get; set; }
+    public T? Data { get; set; }
+    public IList<string> Errors { get; set; }
 }
 
 public class HttpResult<T> : IHttpResult<T>
 {
     public IResult<T>? Value { get; set; }
     public int StatusCode { get; set; }
-    
+
     public async Task ExecuteResultAsync(ActionContext context)
     {
-        var objectResult = new ObjectResult(Value)
-        {
+        var objectResult = new ObjectResult(Value) {
             StatusCode = StatusCode
         };
 
@@ -82,7 +81,7 @@ public class HttpResult<T> : IHttpResult<T>
 
     public static Task<IHttpResult<T>> SuccessAsync(int statusCode, string? message = default)
     {
-        return Task.FromResult(Success(statusCode,default, message));
+        return Task.FromResult(Success(statusCode, default, message));
     }
 
     public static Task<IHttpResult<T>> SuccessAsync(int statusCode, T data, string? message = default)
