@@ -107,7 +107,6 @@ public class AuthenticationService : IAuthenticationService
 
         if (user is null)
         {
-            // @TODO - add user to DB
             user = new User {
                 FirstName = googleUserPayload.GivenName,
                 LastName = googleUserPayload.FamilyName,
@@ -118,7 +117,26 @@ public class AuthenticationService : IAuthenticationService
                 Gender = Gender.Undefined,
                 CreatedBy = _systemUser.UserId
             };
-            throw new NotImplementedException();
+
+            var addNewUser = await _userManager.CreateAsync(user, _appConfig.DefaultAppPassword);
+
+            if (!addNewUser.Succeeded)
+            {
+                return await HttpResult<TokenResponse?>.FailAsync(
+                    AppConstants.StatusCode.InternalServerError,
+                    AppConstants.Messages.InternalServerError
+                );
+            }
+
+            var addToBasicRole = await _userManager.AddToRoleAsync(user, AppConstants.Roles.Basic);
+
+            if (!addToBasicRole.Succeeded)
+            {
+                return await HttpResult<TokenResponse?>.FailAsync(
+                    AppConstants.StatusCode.InternalServerError,
+                    AppConstants.Messages.InternalServerError
+                );
+            }
         }
 
         // @TODO - Implement the callback url at the presentation layer.

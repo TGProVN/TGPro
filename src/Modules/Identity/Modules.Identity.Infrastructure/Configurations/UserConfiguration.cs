@@ -13,7 +13,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-        builder.HasIndex(x => x.PhoneNumber).IsUnique();
+        builder.HasIndex(x => x.PhoneNumber).IsUnique(false);
         builder.HasIndex(x => x.Email).IsUnique();
         builder.HasIndex(x => x.AvatarId).IsUnique();
         builder.HasIndex(x => x.IsActive).IsUnique(false);

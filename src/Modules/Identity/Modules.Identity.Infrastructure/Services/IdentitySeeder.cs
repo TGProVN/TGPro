@@ -100,7 +100,7 @@ public class IdentitySeeder : IIdentitySeeder
 
                  if (ownerFromDb is null)
                  {
-                     await _userManager.CreateAsync(webOwner, _appConfig.DefaultAppPassword);
+                     await _userManager.CreateAsync(webOwner, _appConfig.DefaultAdminPassword);
 
                      ownerFromDb = await _userManager.FindByEmailAsync(webOwner.Email);
 
@@ -183,7 +183,7 @@ public class IdentitySeeder : IIdentitySeeder
 
                  if (systemWideFromDb is null)
                  {
-                     await _userManager.CreateAsync(systemWide, _appConfig.DefaultAppPassword);
+                     await _userManager.CreateAsync(systemWide, _appConfig.DefaultSystemWidePassword);
 
                      systemWideFromDb = await _userManager.FindByEmailAsync(systemWide.Email);
 
@@ -214,7 +214,7 @@ public class IdentitySeeder : IIdentitySeeder
                      }
                  }
 
-                 foreach (var permissionDetail in PermissionHelpers.GetDefaultAppPermissions())
+                 foreach (var permissionDetail in PermissionHelpers.GetAllAppPermissions())
                  {
                      await _dbContext.AddPermissionClaim(roleFromDb, permissionDetail);
                  }
