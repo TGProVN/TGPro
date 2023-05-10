@@ -8,5 +8,4 @@ public interface IAuthenticationService
 {
     Task<IHttpResult<TokenResponse?>> SignIn(LoginRequest request);
     Task<IHttpResult<TokenResponse?>> SignInWithGoogle();
-    Task<IHttpResult<string>> Test();
 }

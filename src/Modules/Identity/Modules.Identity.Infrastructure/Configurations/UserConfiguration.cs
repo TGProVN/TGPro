@@ -13,11 +13,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-        builder.HasIndex(x => x.PhoneNumber).IsUnique();
+        builder.HasIndex(x => x.PhoneNumber).IsUnique(false);
         builder.HasIndex(x => x.Email).IsUnique();
         builder.HasIndex(x => x.AvatarId).IsUnique();
-        builder.HasIndex(x => x.IsActive).IsUnique();
-        builder.HasIndex(x => x.IsDeleted).IsUnique();
+        builder.HasIndex(x => x.IsActive).IsUnique(false);
+        builder.HasIndex(x => x.IsDeleted).IsUnique(false);
 
         builder.Property(x => x.FirstName).IsRequired().HasColumnType("nvarchar(100)");
         builder.Property(x => x.LastName).IsRequired().HasColumnType("nvarchar(100)");

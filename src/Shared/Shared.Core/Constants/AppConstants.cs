@@ -8,6 +8,29 @@ public static class AppConstants
         "https://www.googleapis.com/auth/userinfo.email"
     };
 
+    public static class DefaultImages
+    {
+        public const string FemaleAvatar =
+            "https://res.cloudinary.com/tgproimagecloud/image/upload/v1638705521/TGProV3/users/default/default_female_photo.jpg";
+
+        public const string FemaleAvatarId = "TGProV3/users/default/default_female_photo";
+
+        public const string MaleAvatar =
+            "https://res.cloudinary.com/tgproimagecloud/image/upload/v1638705521/TGProV3/users/default/default_male_photo.jpg";
+
+        public const string MaleAvatarId = "TGProV3/users/default/default_male_photo";
+
+        public const string BrandImage =
+            "https://res.cloudinary.com/tgproimagecloud/image/upload/v1638721852/TGProV3/brands/default/default_brand_photo.jpg";
+
+        public const string BrandImageId = "TGProV3/brands/default/default_brand_photo";
+
+        public const string ProductImage =
+            "https://res.cloudinary.com/tgproimagecloud/image/upload/v1638867804/TGProV3/products/default/default_product_photo.jpg";
+
+        public const string ProductImageId = "TGProV3/products/default/default_product_photo";
+    }
+
     public static class Messages
     {
         public const string ValidationError = "One or more validation failures have occurred!";
@@ -25,6 +48,7 @@ public static class AppConstants
 
     public static class Roles
     {
+        public const string System = "System";
         public const string Administrator = "Administrator";
         public const string Moderator = "Moderator";
         public const string Basic = "Basic";
