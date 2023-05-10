@@ -20,10 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Controllers\"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\Modules\Catalog\Modules.Catalog\Modules.Catalog.csproj"/>
         <ProjectReference Include="..\Modules\Identity\Modules.Identity\Modules.Identity.csproj"/>
         <ProjectReference Include="..\Shared\Shared.Infrastructure\Shared.Infrastructure.csproj"/>

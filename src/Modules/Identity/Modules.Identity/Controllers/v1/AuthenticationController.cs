@@ -21,9 +21,9 @@ public class AuthenticationController : ControllerBase
         return await _authService.SignIn(request);
     }
 
-    [HttpGet("test-route")]
-    public async Task<IActionResult> Test()
+    [HttpPost("google")]
+    public async Task<IActionResult> GoogleSignIn()
     {
-        return await _authService.Test();
+        return await _authService.SignInWithGoogle();
     }
 }

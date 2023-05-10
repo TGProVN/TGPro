@@ -6,9 +6,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Modules.Identity.Core.Abstractions.Services;
 using Modules.Identity.Core.Entities;
+using Modules.Identity.Core.Enums;
 using Modules.Identity.Core.Requests;
 using Modules.Identity.Core.Responses;
 using Shared.Core.Abstractions;
+using Shared.Core.Abstractions.Services;
 using Shared.Core.Configurations;
 using Shared.Core.Constants;
 using Shared.Core.Wrapper;
@@ -25,27 +27,21 @@ public class AuthenticationService : IAuthenticationService
     private readonly GoogleAuthConfiguration _googleAuthConfig;
     private readonly RoleManager<Role> _roleManager;
     private readonly UserManager<User> _userManager;
+    private readonly ISystemUserService _systemUser;
 
     public AuthenticationService(
         UserManager<User> userManager,
         RoleManager<Role> roleManager,
+        ISystemUserService systemUser,
         IOptions<AppConfiguration> appConfig,
         IOptions<GoogleAuthConfiguration> googleAuthConfig
     )
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _systemUser = systemUser;
         _appConfig = appConfig.Value;
         _googleAuthConfig = googleAuthConfig.Value;
-    }
-
-    public async Task<IHttpResult<string>> Test()
-    {
-        return await HttpResult<string>.SuccessAsync(
-            AppConstants.StatusCode.Ok,
-            "Test Route!",
-            "Default Message"
-        );
     }
 
     public async Task<IHttpResult<TokenResponse?>> SignIn(LoginRequest request)
@@ -112,6 +108,16 @@ public class AuthenticationService : IAuthenticationService
         if (user is null)
         {
             // @TODO - add user to DB
+            user = new User {
+                FirstName = googleUserPayload.GivenName,
+                LastName = googleUserPayload.FamilyName,
+                Email = googleUserPayload.Email,
+                AvatarId = AppConstants.DefaultImages.MaleAvatarId,
+                AvatarUrl = AppConstants.DefaultImages.MaleAvatar,
+                IsActive = true,
+                Gender = Gender.Undefined,
+                CreatedBy = _systemUser.UserId
+            };
             throw new NotImplementedException();
         }
 

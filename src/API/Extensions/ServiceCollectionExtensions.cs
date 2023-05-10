@@ -5,29 +5,38 @@ using Microsoft.Extensions.Options;
 using Modules.Catalog.Extensions;
 using Modules.Identity.Extensions;
 using Shared.Core.Abstractions.Services;
+using Shared.Core.Configurations;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    public static AppConfiguration GetAppConfigurations(this IServiceCollection services,
+                                                        IConfiguration configuration)
+    {
+        var appConfig = configuration.GetSection(nameof(AppConfiguration));
+        services.Configure<AppConfiguration>(appConfig);
+        return appConfig.Get<AppConfiguration>() ?? throw new InvalidOperationException();
+    }
+
     public static void AddSwagger(this IServiceCollection services)
     {
         services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
         services.AddSwaggerGen(options => options.OperationFilter<SwaggerDefaultValues>());
     }
 
-    public static void RegisterApiVersioning(this IServiceCollection services)
+    public static void RegisterApiVersioning(this IServiceCollection services, AppConfiguration appConfig)
     {
         services
            .AddApiVersioning(options => {
-                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.DefaultApiVersion = new ApiVersion(appConfig.ApiMajorVersion, appConfig.ApiMinorVersion);
                 options.ApiVersionReader = new UrlSegmentApiVersionReader();
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.ReportApiVersions = true;
             })
            .AddApiExplorer(options => {
-                options.GroupNameFormat = "'v'VVV";
+                options.GroupNameFormat = appConfig.ApiVersionGroupNameFormat;
                 options.SubstituteApiVersionInUrl = true;
             });
     }
