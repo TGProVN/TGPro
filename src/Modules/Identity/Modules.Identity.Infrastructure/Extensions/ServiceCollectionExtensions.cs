@@ -6,6 +6,7 @@ using Modules.Identity.Core.Abstractions.Services;
 using Modules.Identity.Core.Entities;
 using Modules.Identity.Infrastructure.Contexts;
 using Modules.Identity.Infrastructure.Services;
+using Shared.Core.Abstractions.Services;
 using Shared.Infrastructure.Extensions;
 
 namespace Modules.Identity.Infrastructure.Extensions;
@@ -42,11 +43,14 @@ public static class ServiceCollectionExtensions
                         throw new NullReferenceException("Could not get AppIdentityDbContext service!")
         );
 
-        services.AddIdentityService();
+        services.AddIdentityServices();
     }
 
-    private static void AddIdentityService(this IServiceCollection services)
+    private static void AddIdentityServices(this IServiceCollection services)
     {
-        services.AddTransient<IAuthenticationService, AuthenticationService>();
+        services
+           .AddTransient<IAuthenticationService, AuthenticationService>()
+           .AddTransient<IIdentitySeeder, IdentitySeeder>()
+           .AddTransient<ISystemUserService, SystemUserService>();
     }
 }

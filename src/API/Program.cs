@@ -1,13 +1,15 @@
 using API.Extensions;
+using API.Middlewares;
 using Shared.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
 var services = builder.Services;
+var appConfig = services.GetAppConfigurations(configuration);
 
 services.AddSharedInfrastructure();
 services.AddSwagger();
-services.RegisterApiVersioning();
+services.RegisterApiVersioning(appConfig);
 services.AddCurrentUserService();
 services.RegisterAppModules(configuration);
 services.AddEndpointsApiExplorer();
@@ -21,6 +23,7 @@ var env = app.Environment;
 app.UseHttpsRedirection();
 app.UseExceptionHandling(env);
 app.ConfigureSwagger();
+app.UseMiddleware<ErrorHandler>();
 app.UseAuthorization();
 app.MapControllers();
 
