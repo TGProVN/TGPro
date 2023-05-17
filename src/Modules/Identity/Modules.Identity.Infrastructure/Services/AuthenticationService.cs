@@ -13,6 +13,7 @@ using Shared.Core.Abstractions;
 using Shared.Core.Abstractions.Services;
 using Shared.Core.Configurations;
 using Shared.Core.Constants;
+using Shared.Core.Exceptions;
 using Shared.Core.Wrapper;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -50,34 +51,22 @@ public class AuthenticationService : IAuthenticationService
 
         if (user is null)
         {
-            return await HttpResult<TokenResponse?>.FailAsync(
-                AppConstants.StatusCode.Unauthorized,
-                AppConstants.Messages.InvalidCredentialInfo
-            );
+            throw new UnauthorizedException(AppConstants.Messages.InvalidCredentialInfo);
         }
 
         if (!user.EmailConfirmed)
         {
-            return await HttpResult<TokenResponse?>.FailAsync(
-                AppConstants.StatusCode.Unauthorized,
-                AppConstants.Messages.EmailUnconfirmed
-            );
+            throw new UnauthorizedException(AppConstants.Messages.EmailUnconfirmed);
         }
 
         if (!user.IsActive)
         {
-            return await HttpResult<TokenResponse?>.FailAsync(
-                AppConstants.StatusCode.Unauthorized,
-                AppConstants.Messages.LockedUser
-            );
+            throw new UnauthorizedException(AppConstants.Messages.LockedUser);
         }
 
         if (!await _userManager.CheckPasswordAsync(user, request.Password))
         {
-            return await HttpResult<TokenResponse?>.FailAsync(
-                AppConstants.StatusCode.Unauthorized,
-                AppConstants.Messages.InvalidCredentialInfo
-            );
+            throw new UnauthorizedException(AppConstants.Messages.InvalidCredentialInfo);
         }
 
         return await CreateTokenResponse(user, _appConfig.DefaultLoginProvider);
@@ -122,20 +111,14 @@ public class AuthenticationService : IAuthenticationService
 
             if (!addNewUser.Succeeded)
             {
-                return await HttpResult<TokenResponse?>.FailAsync(
-                    AppConstants.StatusCode.InternalServerError,
-                    AppConstants.Messages.InternalServerError
-                );
+                throw new Exception(AppConstants.Messages.InternalServerError);
             }
 
             var addToBasicRole = await _userManager.AddToRoleAsync(user, AppConstants.Roles.Basic);
 
             if (!addToBasicRole.Succeeded)
             {
-                return await HttpResult<TokenResponse?>.FailAsync(
-                    AppConstants.StatusCode.InternalServerError,
-                    AppConstants.Messages.InternalServerError
-                );
+                throw new Exception(AppConstants.Messages.InternalServerError);
             }
         }
 

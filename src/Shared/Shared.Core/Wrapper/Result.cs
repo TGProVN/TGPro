@@ -46,7 +46,7 @@ public class HttpResult<T> : IHttpResult<T>
         await objectResult.ExecuteResultAsync(context);
     }
 
-    public static IHttpResult<T> Fail(
+    private static IHttpResult<T> Fail(
         int statusCode,
         string? message = default,
         IList<string>? errors = default
@@ -69,7 +69,7 @@ public class HttpResult<T> : IHttpResult<T>
         return Task.FromResult(Fail(statusCode, message, errors));
     }
 
-    public static IHttpResult<T> Success(int statusCode, T? data, string? message = default)
+    private static IHttpResult<T> Success(int statusCode, T? data, string? message = default)
     {
         var value = new Result<T>(true, message, data);
 
