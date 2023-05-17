@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>027cc08e-951d-45bc-bf23-28e755c8edf4</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,6 +24,12 @@
         <ProjectReference Include="..\Modules\Catalog\Modules.Catalog\Modules.Catalog.csproj"/>
         <ProjectReference Include="..\Modules\Identity\Modules.Identity\Modules.Identity.csproj"/>
         <ProjectReference Include="..\Shared\Shared.Infrastructure\Shared.Infrastructure.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="..\..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
 </Project>
