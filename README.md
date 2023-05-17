@@ -1,24 +1,24 @@
-### Build
+# About The Project
 
-```bash
-dotnet restore
-dotnet build
-```
+TGPro is a .NET project based on Modular Architecture that fully adheres to the principles and design patterns such as
+Inversion of Control, Dependency Inversion, Dependency Injection, ...
 
-### Migration
+## Tech Stack
 
-```bash
-dotnet tool install --global dotnet-ef
-dotnet restore
-cd src
-dotnet ef migrations add "Initial Catalog" -s ./API -p ./Modules/Catalog/Modules.Catalog.Infrastructure -c YOUR_DBCONTEXT
-dotnet ef migrations add "Initial Identity" -s ./API -p ./Modules/Identity/Modules.Identity.Infrastructure -c YOUR_DBCONTEXT
-```
+- [.NET 7.0](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-7) - An open-source developer platform for
+  building many different types of applications.
+- [EF Core 7.0](https://docs.microsoft.com/en-us/ef/core/) - EF Core can serve as an object-relational mapper (O/RM).
 
-### Docker
+## Features
 
-```bash
-dotnet dev-certs https -ep PATH
-dotnet dev-certs https --trust
-docker-compose up --build -d
-```
+All the features are mentioned in the
+[Features.md File](https://github.com/TGProVN/TGPro/blob/master/Features.md)
+
+## Commands
+
+All the commands are mentioned in the
+[Commands.md File](https://github.com/TGProVN/TGPro/blob/master/Commands.md)
+
+## License
+
+Distributed under the MIT License.
