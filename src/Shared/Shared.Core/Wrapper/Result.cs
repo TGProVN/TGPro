@@ -1,91 +1,79 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Shared.Core.Abstractions;
+﻿using Shared.Core.Abstractions;
 
 namespace Shared.Core.Wrapper;
 
-public class Result<T> : IResult<T>
+public class Result : IResult
 {
-
-    public Result(
-        bool succeeded,
-        string? message = default,
-        T? data = default,
-        IList<string>? errors = default
-    ) : this(succeeded, message, data)
-    {
-        if (errors is not null && errors.Any())
-        {
-            Errors = errors;
-        }
-    }
-
-    private Result(bool succeeded, string? message = default, T? data = default)
-    {
-        Message = message;
-        Succeeded = succeeded;
-        Data = data;
-        Errors = new List<string>();
-    }
-    public string? Message { get; set; }
     public bool Succeeded { get; set; }
-    public T? Data { get; set; }
-    public IList<string> Errors { get; set; }
+    public string? Message { get; set; }
+    public IList<string>? Errors { get; set; }
+
+    private static IResult Fail(string? message = default, IList<string>? errors = default)
+    {
+        return new Result {
+            Succeeded = false,
+            Message = message,
+            Errors = errors ?? new List<string>()
+        };
+    }
+
+    public static Task<IResult> FailAsync(string? message = default, IList<string>? errors = default)
+    {
+        return Task.FromResult(Fail(message, errors));
+    }
+
+    private static IResult Success(string? message = default)
+    {
+        return new Result {
+            Succeeded = true,
+            Message = message
+        };
+    }
+
+    public static Task<IResult> SuccessAsync(string? message = null)
+    {
+        return Task.FromResult(Success(message));
+    }
 }
 
-public class HttpResult<T> : IHttpResult<T>
+public class Result<T> : IResult<T>
 {
-    public IResult<T>? Value { get; set; }
-    public int StatusCode { get; set; }
+    public bool Succeeded { get; set; }
+    public string? Message { get; set; }
+    public IList<string>? Errors { get; set; }
+    public T? Data { get; private init; }
 
-    public async Task ExecuteResultAsync(ActionContext context)
+    private static IResult<T> Fail(string? message = default, IList<string>? errors = default)
     {
-        var objectResult = new ObjectResult(Value) {
-            StatusCode = StatusCode
-        };
-
-        await objectResult.ExecuteResultAsync(context);
-    }
-
-    private static IHttpResult<T> Fail(
-        int statusCode,
-        string? message = default,
-        IList<string>? errors = default
-    )
-    {
-        var value = new Result<T>(false, message, default, errors);
-
-        return new HttpResult<T> {
-            Value = value,
-            StatusCode = statusCode
+        return new Result<T> {
+            Succeeded = false,
+            Message = message,
+            Errors = errors ?? new List<string>(),
+            Data = default
         };
     }
-
-    public static Task<IHttpResult<T>> FailAsync(
-        int statusCode,
-        string? message = default,
-        IList<string>? errors = default
-    )
+    public static Task<IResult<T>> FailAsync(string? message = default, IList<string>? errors = default)
     {
-        return Task.FromResult(Fail(statusCode, message, errors));
+        return Task.FromResult(Fail(message, errors));
     }
 
-    private static IHttpResult<T> Success(int statusCode, T? data, string? message = default)
+    private static IResult<T> Success(T? data, string? message = default)
     {
-        var value = new Result<T>(true, message, data);
-
-        return new HttpResult<T> {
-            Value = value,
-            StatusCode = statusCode
+        return new Result<T> {
+            Succeeded = true,
+            Message = message,
+            Errors = new List<string>(),
+            Data = data
         };
     }
 
-    public static Task<IHttpResult<T>> SuccessAsync(int statusCode, string? message = default)
+    public static Task<IResult<T>> SuccessAsync(string? message = default)
     {
-        return Task.FromResult(Success(statusCode, default, message));
+        return Task.FromResult(Success(default, message));
     }
 
-    public static Task<IHttpResult<T>> SuccessAsync(int statusCode, T data, string? message = default)
+    public static Task<IResult<T>> SuccessAsync(T data, string? message = default)
     {
-        return Task.FromResult(Success(statusCode, data, message));
+        return Task.FromResult(Success(data, message));
     }
 }
