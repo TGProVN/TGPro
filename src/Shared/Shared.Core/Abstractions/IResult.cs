@@ -1,17 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace Shared.Core.Abstractions;
 
-namespace Shared.Core.Abstractions;
-
-public interface IResult<T>
+public interface IResult
 {
     bool Succeeded { get; set; }
     string? Message { get; set; }
-    T? Data { get; set; }
-    IList<string> Errors { get; set; }
+    IList<string>? Errors { get; set; }
 }
 
-public interface IHttpResult<T> : IActionResult
+public interface IResult<out T> : IResult
 {
-    IResult<T>? Value { get; set; }
-    int StatusCode { get; set; }
+    T? Data { get; }
 }

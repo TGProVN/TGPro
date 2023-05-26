@@ -35,7 +35,7 @@ public class ErrorHandler
     {
         context.Response.ContentType = "application/json";
 
-        var response = new Result<string>(false);
+        var response = new Result();
 
         switch (exception)
         {
