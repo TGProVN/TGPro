@@ -9,12 +9,10 @@ using Modules.Identity.Core.Entities;
 using Modules.Identity.Core.Enums;
 using Modules.Identity.Core.Requests;
 using Modules.Identity.Core.Responses;
-using Shared.Core.Abstractions;
 using Shared.Core.Abstractions.Services;
 using Shared.Core.Configurations;
 using Shared.Core.Constants;
 using Shared.Core.Exceptions;
-using Shared.Core.Wrapper;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -45,7 +43,7 @@ public class AuthenticationService : IAuthenticationService
         _googleAuthConfig = googleAuthConfig.Value;
     }
 
-    public async Task<IHttpResult<TokenResponse?>> SignIn(LoginRequest request)
+    public async Task<TokenResponse?> SignIn(LoginRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
 
@@ -72,7 +70,7 @@ public class AuthenticationService : IAuthenticationService
         return await CreateTokenResponse(user, _appConfig.DefaultLoginProvider);
     }
 
-    public async Task<IHttpResult<TokenResponse?>> SignInWithGoogle()
+    public async Task<TokenResponse?> SignInWithGoogle()
     {
         var googleCredential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
             new ClientSecrets {
@@ -126,7 +124,7 @@ public class AuthenticationService : IAuthenticationService
         return await CreateTokenResponse(user, _appConfig.GoogleLoginProvider);
     }
 
-    private async Task<IHttpResult<TokenResponse?>> CreateTokenResponse(User user, string loginProvider)
+    private async Task<TokenResponse?> CreateTokenResponse(User user, string loginProvider)
     {
         var refreshToken = GenerateRefreshToken();
 
@@ -140,13 +138,10 @@ public class AuthenticationService : IAuthenticationService
 
         var token = await GenerateJwtToken(user);
 
-        return await HttpResult<TokenResponse?>.SuccessAsync(
-            AppConstants.StatusCode.Created,
-            new TokenResponse {
-                Token = token,
-                RefreshToken = refreshToken
-            }
-        );
+        return new TokenResponse {
+            Token = token,
+            RefreshToken = refreshToken
+        };
     }
 
     private static string GenerateRefreshToken()

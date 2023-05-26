@@ -83,13 +83,8 @@ public static class AppConstants
         public const int Ok = 200;
         public const int Created = 201;
         public const int Accepted = 202;
-        public const int NonAuthoritativeInformation = 203;
         public const int NoContent = 204;
-        public const int ResetContent = 205;
         public const int PartialContent = 206;
-        public const int MultiStatus = 207;
-        public const int AlreadyReported = 208;
-        public const int IMUsed = 226;
 
         // Redirection 3xx
         public const int MultipleChoices = 300;

@@ -12,6 +12,54 @@ indent_style = space
 indent_size = 4
 trim_trailing_whitespace = true
 
+# ReSharper properties
+resharper_accessor_owner_body = accessors_with_expression_body
+resharper_align_multiline_argument = true
+resharper_align_multiline_binary_patterns = true
+resharper_align_multiline_calls_chain = true
+resharper_align_tuple_components = true
+resharper_arguments_skip_single = true
+resharper_blank_lines_after_block_statements = 0
+resharper_blank_lines_after_control_transfer_statements = 1
+resharper_blank_lines_after_start_comment = 0
+resharper_blank_lines_around_block_case_section = 1
+resharper_braces_redundant = false
+resharper_csharp_blank_lines_around_invocable = 0
+resharper_csharp_case_block_braces = end_of_line
+resharper_csharp_empty_block_style = together_same_line
+resharper_csharp_max_line_length = 120
+resharper_csharp_outdent_commas = true
+resharper_csharp_outdent_dots = true
+resharper_csharp_remove_blank_lines_near_braces_in_declarations = false
+resharper_csharp_space_around_alias_eq = false
+resharper_csharp_space_before_trailing_comment = false
+resharper_indent_preprocessor_other = do_not_change
+resharper_instance_members_qualify_declared_in =
+resharper_int_align = false
+resharper_keep_existing_attribute_arrangement = true
+resharper_keep_existing_declaration_block_arrangement = false
+resharper_keep_existing_enum_arrangement = false
+resharper_keep_existing_expr_member_arrangement = true
+resharper_keep_existing_invocation_parens_arrangement = true
+resharper_max_attribute_length_for_same_line = 70
+resharper_method_or_operator_body = block_body
+resharper_outdent_binary_ops = true
+resharper_parentheses_redundancy_style = remove
+resharper_place_accessorholder_attribute_on_same_line = false
+resharper_place_expr_method_on_single_line = if_owner_is_single_line
+resharper_place_field_attribute_on_same_line = false
+resharper_place_method_attribute_on_same_line = true
+resharper_place_simple_initializer_on_single_line = false
+resharper_space_within_empty_braces = false
+resharper_use_heuristics_for_body_style = true
+resharper_wrap_after_declaration_lpar = false
+resharper_wrap_before_arrow_with_expressions = true
+resharper_align_linq_query = true
+resharper_align_multiline_extends_list = true
+resharper_align_multiline_parameter = true
+resharper_align_multiple_declaration = true
+resharper_align_multline_type_parameter_constrains = true
+
 # Json files
 [*.json]
 indent_size = 2
@@ -63,55 +111,6 @@ dotnet_style_prefer_auto_properties = true:suggestion
 dotnet_style_prefer_conditional_expression_over_assignment = true:silent
 dotnet_style_prefer_conditional_expression_over_return = true:silent
 csharp_prefer_simple_default_expression = true:suggestion
-
-
-# ReSharper properties
-resharper_accessor_owner_body = accessors_with_expression_body
-resharper_align_multiline_argument = true
-resharper_align_multiline_binary_patterns = true
-resharper_align_multiline_calls_chain = true
-resharper_align_tuple_components = true
-resharper_arguments_skip_single = true
-resharper_blank_lines_after_block_statements = 0
-resharper_blank_lines_after_control_transfer_statements = 1
-resharper_blank_lines_after_start_comment = 0
-resharper_blank_lines_around_block_case_section = 1
-resharper_braces_redundant = false
-resharper_csharp_blank_lines_around_invocable = 0
-resharper_csharp_case_block_braces = end_of_line
-resharper_csharp_empty_block_style = together_same_line
-resharper_csharp_max_line_length = 120
-resharper_csharp_outdent_commas = true
-resharper_csharp_outdent_dots = true
-resharper_csharp_remove_blank_lines_near_braces_in_declarations = false
-resharper_csharp_space_around_alias_eq = false
-resharper_csharp_space_before_trailing_comment = false
-resharper_indent_preprocessor_other = do_not_change
-resharper_instance_members_qualify_declared_in =
-resharper_int_align = false
-resharper_keep_existing_attribute_arrangement = true
-resharper_keep_existing_declaration_block_arrangement = false
-resharper_keep_existing_enum_arrangement = false
-resharper_keep_existing_expr_member_arrangement = true
-resharper_keep_existing_invocation_parens_arrangement = true
-resharper_max_attribute_length_for_same_line = 70
-resharper_method_or_operator_body = block_body
-resharper_outdent_binary_ops = true
-resharper_parentheses_redundancy_style = remove
-resharper_place_accessorholder_attribute_on_same_line = false
-resharper_place_expr_method_on_single_line = if_owner_is_single_line
-resharper_place_field_attribute_on_same_line = false
-resharper_place_method_attribute_on_same_line = true
-resharper_place_simple_initializer_on_single_line = false
-resharper_space_within_empty_braces = false
-resharper_use_heuristics_for_body_style = true
-resharper_wrap_after_declaration_lpar = false
-resharper_wrap_before_arrow_with_expressions = true
-resharper_align_linq_query = true
-resharper_align_multiline_extends_list = true
-resharper_align_multiline_parameter = true
-resharper_align_multiple_declaration = true
-resharper_align_multline_type_parameter_constrains = true
 
 ###############################
 # Naming Conventions          #
