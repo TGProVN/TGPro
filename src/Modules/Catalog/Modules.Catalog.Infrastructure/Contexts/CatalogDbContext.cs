@@ -3,20 +3,21 @@ using Modules.Catalog.Core.Abstractions;
 using Modules.Catalog.Core.Entities;
 using Modules.Catalog.Infrastructure.Configurations;
 using Shared.Core.Abstractions.Services;
+using Shared.Core.Constants;
 using Shared.Infrastructure.Contexts;
 
 namespace Modules.Catalog.Infrastructure.Contexts;
 
 public class CatalogDbContext : ModuleDbContext, ICatalogDbContext
 {
-
     public CatalogDbContext(DbContextOptions<CatalogDbContext> options, ICurrentUserService currentUser)
         : base(options)
     {
-        Schema = "Catalog";
+        Schema = AppConstants.TableSchemas.Catalog;
         UserId = currentUser.UserId;
     }
-    protected override string Schema { get; }
+
+    public override string Schema { get; }
 
     public DbSet<Brand>? Brands { get; set; }
 
