@@ -3,20 +3,16 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Util;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Modules.Identity.Core.Abstractions.Services;
 using Modules.Identity.Core.Entities;
 using Modules.Identity.Core.Enums;
+using Modules.Identity.Core.Helpers;
 using Modules.Identity.Core.Requests;
 using Modules.Identity.Core.Responses;
 using Shared.Core.Abstractions.Services;
 using Shared.Core.Configurations;
 using Shared.Core.Constants;
 using Shared.Core.Exceptions;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Modules.Identity.Infrastructure.Services;
 
@@ -82,7 +78,10 @@ public class AuthenticationService : IAuthenticationService
             CancellationToken.None
         );
 
-        await RefreshGoogleToken(googleCredential);
+        if (googleCredential.Token.IsExpired(SystemClock.Default))
+        {
+            await googleCredential.RefreshTokenAsync(CancellationToken.None);
+        }
 
         var googleUserPayload = await GoogleJsonWebSignature.ValidateAsync(
             googleCredential.Token.IdToken,
@@ -92,6 +91,7 @@ public class AuthenticationService : IAuthenticationService
 
         var user = await _userManager.FindByEmailAsync(googleUserPayload.Email);
 
+        // @TODO - Write shared AddBasicUser method
         if (user is null)
         {
             user = new User {
@@ -126,7 +126,8 @@ public class AuthenticationService : IAuthenticationService
 
     private async Task<TokenResponse?> CreateTokenResponse(User user, string loginProvider)
     {
-        var refreshToken = GenerateRefreshToken();
+        var tokenHelpers = TokenHelpers.GetInstance(_userManager, _roleManager);
+        var refreshToken = TokenHelpers.RefreshToken;
 
         user.UserTokens.Add(new UserToken {
             LoginProvider = loginProvider,
@@ -136,86 +137,11 @@ public class AuthenticationService : IAuthenticationService
 
         await _userManager.UpdateAsync(user);
 
-        var token = await GenerateJwtToken(user);
+        var token = await tokenHelpers.GenerateJwtToken(user, _appConfig.Secret);
 
         return new TokenResponse {
             Token = token,
             RefreshToken = refreshToken
         };
-    }
-
-    private static string GenerateRefreshToken()
-    {
-        var randomNumber = new byte[64];
-        using var rng = RandomNumberGenerator.Create();
-        rng.GetBytes(randomNumber);
-
-        return Convert.ToBase64String(randomNumber);
-    }
-
-    private async Task<string> GenerateJwtToken(User user)
-    {
-        var credentials = GetSigningCredentials();
-        var claims = await GetClaims(user);
-
-        var tokenDescriptor = new SecurityTokenDescriptor {
-            Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddDays(2),
-            SigningCredentials = credentials
-        };
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-
-        return tokenHandler.WriteToken(token);
-    }
-
-    private SigningCredentials GetSigningCredentials()
-    {
-        var secret = Encoding.UTF8.GetBytes(_appConfig.Secret);
-        var key = new SymmetricSecurityKey(secret);
-
-        return new SigningCredentials(key, SecurityAlgorithms.RsaSha256);
-    }
-
-    private async Task<IEnumerable<Claim>> GetClaims(User user)
-    {
-        var userClaims = await _userManager.GetClaimsAsync(user);
-        var roles = await _userManager.GetRolesAsync(user);
-        var roleClaims = new List<Claim>();
-        var permissionClaims = new List<Claim>();
-
-        foreach (var role in roles)
-        {
-            roleClaims.Add(new Claim(ClaimTypes.Role, role));
-            var roleEntity = await _roleManager.FindByNameAsync(role);
-
-            if (roleEntity is null)
-            {
-                continue;
-            }
-
-            var permissions = await _roleManager.GetClaimsAsync(roleEntity);
-            permissionClaims.AddRange(permissions);
-        }
-
-        var result = new List<Claim> {
-            new(ClaimTypes.NameIdentifier, user.Id),
-            new(ClaimTypes.Email, user.Email!),
-            new(ClaimTypes.GivenName, $"{user.FirstName} {user.LastName}")
-        };
-
-        return result.Union(userClaims).Union(roleClaims).Union(permissionClaims);
-    }
-
-    private static async Task<bool> RefreshGoogleToken(UserCredential userCredential)
-    {
-        if (userCredential.Token.IsExpired(SystemClock.Default))
-        {
-            return await userCredential.RefreshTokenAsync(CancellationToken.None);
-        }
-
-        return true;
     }
 }

@@ -4,7 +4,7 @@ using Modules.Identity.Core.Entities;
 using Shared.Core.Constants;
 using Shared.Core.Structs;
 
-namespace Modules.Identity.Infrastructure.Extensions;
+namespace Modules.Identity.Core.Extensions;
 
 public static class DatabaseContextExtensions
 {
