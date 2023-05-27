@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Modules.Catalog.Controllers;
+namespace Modules.Catalog.Controllers.v1;
 
-internal class BrandsController : BaseCatalogController
+public class BrandsController : CatalogControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetAllAsync()

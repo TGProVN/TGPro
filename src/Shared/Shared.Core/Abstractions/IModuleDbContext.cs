@@ -2,5 +2,6 @@
 
 public interface IModuleDbContext
 {
+    string? Schema { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

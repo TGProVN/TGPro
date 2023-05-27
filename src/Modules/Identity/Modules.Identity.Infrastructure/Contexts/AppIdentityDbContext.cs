@@ -10,7 +10,12 @@ namespace Modules.Identity.Infrastructure.Contexts;
 
 public class AppIdentityDbContext : ModuleDbContext<Role, RoleClaim, User, UserToken>, IAppIdentityDbContext
 {
-    public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : base(options) {}
+    public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : base(options)
+    {
+        Schema = AppConstants.TableSchemas.Identity;
+    }
+
+    public override string? Schema { get; }
 
     public override DbSet<Role> Roles {
         get => Set<Role>();
@@ -25,16 +30,16 @@ public class AppIdentityDbContext : ModuleDbContext<Role, RoleClaim, User, UserT
         base.OnModelCreating(builder);
 
         builder.Entity<IdentityUserRole<string>>(entity => {
-            entity.ToTable("UserRoles", AppConstants.TableSchemas.Identity);
+            entity.ToTable("UserRoles", Schema);
         });
         builder.Entity<IdentityUserClaim<string>>(entity => {
-            entity.ToTable("UserClaims", AppConstants.TableSchemas.Identity);
+            entity.ToTable("UserClaims", Schema);
         });
         builder.Entity<IdentityUserLogin<string>>(entity => {
-            entity.ToTable("UserLogins", AppConstants.TableSchemas.Identity);
+            entity.ToTable("UserLogins", Schema);
         });
 
-        // Custom
+        // Custom Identity default table
         builder.ApplyConfiguration(new RoleClaimConfiguration());
         builder.ApplyConfiguration(new RoleConfiguration());
         builder.ApplyConfiguration(new UserConfiguration());
