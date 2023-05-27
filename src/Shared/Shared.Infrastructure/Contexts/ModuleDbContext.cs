@@ -8,10 +8,10 @@ namespace Shared.Infrastructure.Contexts;
 
 public abstract class ModuleDbContext : AuditableDbContext, IModuleDbContext
 {
+    public abstract string? Schema { get; }
+    protected string? UserId { get; init; }
 
     protected ModuleDbContext(DbContextOptions options) : base(options) {}
-    protected abstract string? Schema { get; }
-    protected string? UserId { get; init; }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -66,6 +66,8 @@ public abstract class ModuleDbContext<TRole, TRoleClaim, TUser, TUserToken>
     where TRoleClaim : IdentityRoleClaim<string>
     where TUserToken : IdentityUserToken<string>
 {
+    public abstract string? Schema { get; }
+
     protected ModuleDbContext(DbContextOptions options) : base(options) {}
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -75,7 +77,10 @@ public abstract class ModuleDbContext<TRole, TRoleClaim, TUser, TUserToken>
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.HasDefaultSchema("Identity");
+        if (!string.IsNullOrWhiteSpace(Schema))
+        {
+            builder.HasDefaultSchema(Schema);
+        }
 
         base.OnModelCreating(builder);
     }

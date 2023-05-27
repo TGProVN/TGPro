@@ -7,12 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Constants\"/>
-        <Folder Include="Extensions\"/>
-        <Folder Include="Features\"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\..\..\Shared\Shared.Core\Shared.Core.csproj"/>
         <ProjectReference Include="..\..\..\Shared\Shared.Model\Shared.Model.csproj"/>
     </ItemGroup>
