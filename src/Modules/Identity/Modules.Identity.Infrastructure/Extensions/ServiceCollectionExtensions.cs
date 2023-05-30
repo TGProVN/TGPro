@@ -24,6 +24,10 @@ public static class ServiceCollectionExtensions
 
         services
            .AddDatabaseContext<AppIdentityDbContext>(connectionString)
+           .AddScoped<IAppIdentityDbContext>(
+                provider => provider.GetService<AppIdentityDbContext>() ??
+                            throw new NullReferenceException("Could not get AppIdentityDbContext service!")
+            )
            .AddIdentity<User, Role>(options => {
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequiredLength = 8;
@@ -37,11 +41,6 @@ public static class ServiceCollectionExtensions
             })
            .AddEntityFrameworkStores<AppIdentityDbContext>()
            .AddDefaultTokenProviders();
-
-        services.AddScoped<IAppIdentityDbContext>(
-            provider => provider.GetService<AppIdentityDbContext>() ??
-                        throw new NullReferenceException("Could not get AppIdentityDbContext service!")
-        );
 
         services.AddIdentityServices();
     }

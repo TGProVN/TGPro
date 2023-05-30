@@ -1,4 +1,6 @@
-﻿namespace API.Extensions;
+﻿using Modules.Identity.Extensions;
+
+namespace API.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
@@ -18,5 +20,10 @@ public static class ApplicationBuilderExtensions
             options.RoutePrefix = "swagger";
             options.DisplayRequestDuration();
         });
+    }
+
+    public static void Initialize(this IApplicationBuilder app)
+    {
+        app.IdentityModuleInitialize();
     }
 }
