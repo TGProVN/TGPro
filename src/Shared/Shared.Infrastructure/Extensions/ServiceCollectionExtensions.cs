@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Core.Abstractions.Services;
 using Shared.Infrastructure.Controllers;
 
 namespace Shared.Infrastructure.Extensions;
@@ -24,19 +23,6 @@ public static class ServiceCollectionExtensions
             });
         });
 
-        using var scope = services.BuildServiceProvider().CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<T>();
-
-        dbContext.Database.Migrate();
-
         return services;
-    }
-
-    public static void SeedModuleData<T>(this IServiceCollection services) where T : IDataSeeder
-    {
-        using var scope = services.BuildServiceProvider().CreateScope();
-        var seeder = scope.ServiceProvider.GetRequiredService<T>();
-
-        seeder.Run();
     }
 }

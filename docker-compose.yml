@@ -1,13 +1,36 @@
 version: '3.4'
 
 services:
-  tgpro:
+  application:
     image: ${DOCKER_REGISTRY-}tgpro
     build:
       context: .
       dockerfile: src/API/Dockerfile
     environment:
       - "ConnectionStrings__DefaultConnection=Server=db;Database=tgpro;User=sa;Password=P@ssw0rd1;MultipleActiveResultSets=true"
+      - "AppConfiguration__Secret=APP_SECRET"
+      - "AppConfiguration__DefaultLoginProvider=APP_DEFAULT_LOGIN_PROVIDER"
+      - "AppConfiguration__GoogleLoginProvider=APP_GOOGLE_LOGIN_PROVIDER"
+      - "AppConfiguration__DefaultAdminPassword=APP_DEFAULT_ADMIN_PASSWORD"
+      - "AppConfiguration__DefaultSystemWidePassword=APP_DEFAULT_SYSTEM-WIDE_PASSWORD"
+      - "AppConfiguration__DefaultAppPassword=DEFAULT_APP_PASSWORD"
+      - "AppConfiguration__DefaultDbPassword=DEFAULT_DB_PASSWORD"
+      - "AppConfiguration__ApplicationUrl=APP_URL"
+      - "AppConfiguration__ApiMajorVersion=1"
+      - "AppConfiguration__ApiMinorVersion=0"
+      - "AppConfiguration__ApiVersionGroupNameFormat='v'VVV"
+      - "CloudinaryConfiguration__CloudName=YOUR_CLOUDINARY_CLOUD-NAME"
+      - "CloudinaryConfiguration__ApiKey=YOUR_CLOUDINARY_API-KEY"
+      - "CloudinaryConfiguration__ApiSecret=YOUR_CLOUDINARY_API-SECRET"
+      - "GoogleAuthConfiguration__ClientId=YOUR_GOOGLE_AUTH_CLIENT-ID"
+      - "GoogleAuthConfiguration__ClientSecret=YOUR_GOOGLE_AUTH_CLIENT-SECRET"
+      - "MailConfiguration__From=FROM@EMAIL.COM"
+      - "MailConfiguration__Host=SMTP.HOST.EMAIL"
+      - "MailConfiguration__Port=587"
+      - "MailConfiguration__Security=STARTTLS"
+      - "MailConfiguration__UserName=USERNAME@HOST.EMAIL"
+      - "MailConfiguration__Password=YOUR_HOST-MAIL_PASSWORD"
+      - "MailConfiguration__DisplayName=YOUR_HOST-MAIL_DISPLAY-NAME"
       - "ASPNETCORE_Kestrel__Certificates__Default__Password=P@ssw0rd1"
       - "ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx"
     volumes:
@@ -23,8 +46,8 @@ services:
   db:
     image: "mcr.microsoft.com/mssql/server"
     environment:
-      - "SA_PASSWORD=P@ssw0rd1"
+      - "MSSQL_SA_PASSWORD=P@ssw0rd1"
       - "ACCEPT_EULA=Y"
     ports:
       - "1433:1433"
-    container_name: mssql
+    container_name: mssql-server

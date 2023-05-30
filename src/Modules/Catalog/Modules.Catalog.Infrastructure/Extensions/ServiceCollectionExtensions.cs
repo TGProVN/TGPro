@@ -17,11 +17,10 @@ public static class ServiceCollectionExtensions
             throw new NullReferenceException("DB Connection String is null!");
         }
 
-        services.AddDatabaseContext<CatalogDbContext>(connectionString);
-
-        services.AddScoped<ICatalogDbContext>(
-            provider => provider.GetService<CatalogDbContext>() ??
-                        throw new NullReferenceException("Could not get CatalogDbContext service!")
-        );
+        services
+           .AddDatabaseContext<CatalogDbContext>(connectionString)
+           .AddScoped<ICatalogDbContext>(
+                provider => provider.GetService<CatalogDbContext>() ??
+                            throw new NullReferenceException("Could not get CatalogDbContext service!"));
     }
 }

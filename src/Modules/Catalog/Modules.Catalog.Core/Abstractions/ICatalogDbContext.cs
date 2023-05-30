@@ -6,5 +6,5 @@ namespace Modules.Catalog.Core.Abstractions;
 
 public interface ICatalogDbContext : IModuleDbContext
 {
-    DbSet<Brand> Brands { get; set; }
+    DbSet<Brand>? Brands { get; set; }
 }
