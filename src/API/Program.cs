@@ -3,7 +3,7 @@ using API.Middlewares;
 using Shared.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-IConfiguration configuration = builder.Configuration;
+var configuration = builder.Configuration;
 var services = builder.Services;
 var appConfig = services.GetAppConfigurations(configuration);
 
@@ -26,5 +26,6 @@ app.ConfigureSwagger();
 app.UseMiddleware<ErrorHandler>();
 app.UseAuthorization();
 app.MapControllers();
+app.Initialize();
 
 app.Run();

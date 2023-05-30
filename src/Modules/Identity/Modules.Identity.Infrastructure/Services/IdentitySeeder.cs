@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Modules.Identity.Core.Abstractions;
 using Modules.Identity.Core.Abstractions.Services;
 using Modules.Identity.Core.Entities;
 using Modules.Identity.Core.Extensions;
@@ -14,7 +16,7 @@ namespace Modules.Identity.Infrastructure.Services;
 public class IdentitySeeder : IIdentitySeeder
 {
     private readonly ILogger<IdentitySeeder> _logger;
-    private readonly AppIdentityDbContext _dbContext;
+    private readonly IAppIdentityDbContext _dbContext;
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<Role> _roleManager;
     private readonly AppConfiguration _appConfig;
@@ -38,9 +40,24 @@ public class IdentitySeeder : IIdentitySeeder
 
     public void Run()
     {
+        _logger.LogInformation("--> Seed Data Phase <--");
+
         try
         {
-            // @TODO - Check DbSet<>
+            _logger.LogInformation("Test Connection!");
+
+            if (!_dbContext.Database.CanConnect())
+            {
+                _logger.LogInformation("Failed to connect to Sql Server!");
+                _logger.LogInformation("--> Cancel Seed Data Phase! <--");
+
+                return;
+            }
+
+            _logger.LogInformation("Connection OK!");
+
+            _logger.LogInformation("Migrate DB...");
+            _dbContext.Database.Migrate();
 
             SeedAdministrator();
             SeedSystemAccount();
@@ -49,7 +66,7 @@ public class IdentitySeeder : IIdentitySeeder
 
             if (result > 0)
             {
-                _logger.LogInformation("Done!");
+                _logger.LogInformation("--> Done! <--");
             }
         }
         catch (Exception ex)
@@ -134,7 +151,7 @@ public class IdentitySeeder : IIdentitySeeder
 
                  foreach (var permissionDetail in PermissionHelpers.GetAllAppPermissions())
                  {
-                     await _dbContext.AddPermissionClaim(roleFromDb, permissionDetail);
+                     await _dbContext.RoleClaims.AddPermissionClaim(roleFromDb, permissionDetail);
                  }
              })
             .GetAwaiter()
@@ -216,7 +233,7 @@ public class IdentitySeeder : IIdentitySeeder
 
                  foreach (var permissionDetail in PermissionHelpers.GetAllAppPermissions())
                  {
-                     await _dbContext.AddPermissionClaim(roleFromDb, permissionDetail);
+                     await _dbContext.RoleClaims.AddPermissionClaim(roleFromDb, permissionDetail);
                  }
              })
             .GetAwaiter()

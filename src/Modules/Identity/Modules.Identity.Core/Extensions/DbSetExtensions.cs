@@ -1,19 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Modules.Identity.Core.Abstractions;
 using Modules.Identity.Core.Entities;
 using Shared.Core.Constants;
 using Shared.Core.Structs;
 
 namespace Modules.Identity.Core.Extensions;
 
-public static class DatabaseContextExtensions
+public static class DbSetExtensions
 {
-    public static async Task AddPermissionClaim(this IAppIdentityDbContext context,
+    public static async Task AddPermissionClaim(this DbSet<RoleClaim> roleClaims,
                                                 Role role,
                                                 PermissionDetail permissionDetail)
     {
         const string claimType = AppConstants.ClaimTypes.Permission;
-        var claims = await context.RoleClaims.Where(x => x.RoleId == role.Id).ToListAsync();
+        var claims = await roleClaims.Where(x => x.RoleId == role.Id).ToListAsync();
 
         foreach (var permission in permissionDetail.Permissions)
         {
@@ -21,7 +20,7 @@ public static class DatabaseContextExtensions
 
             if (!exists)
             {
-                await context.RoleClaims.AddAsync(
+                await roleClaims.AddAsync(
                     new RoleClaim(permissionDetail.Description, permissionDetail.Group) {
                         ClaimType = AppConstants.ClaimTypes.Permission,
                         ClaimValue = permission,

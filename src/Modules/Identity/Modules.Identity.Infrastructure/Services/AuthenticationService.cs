@@ -41,9 +41,10 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<TokenResponse?> SignIn(LoginRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        var user = await _userManager.FindByEmailAsync(request.Email)
+                ?? throw new UnauthorizedException(AppConstants.Messages.InvalidCredentialInfo);
 
-        if (user is null)
+        if (!await _userManager.CheckPasswordAsync(user, request.Password))
         {
             throw new UnauthorizedException(AppConstants.Messages.InvalidCredentialInfo);
         }
@@ -56,11 +57,6 @@ public class AuthenticationService : IAuthenticationService
         if (!user.IsActive)
         {
             throw new UnauthorizedException(AppConstants.Messages.LockedUser);
-        }
-
-        if (!await _userManager.CheckPasswordAsync(user, request.Password))
-        {
-            throw new UnauthorizedException(AppConstants.Messages.InvalidCredentialInfo);
         }
 
         return await CreateTokenResponse(user, _appConfig.DefaultLoginProvider);
