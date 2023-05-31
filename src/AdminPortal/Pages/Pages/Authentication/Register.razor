@@ -1,0 +1,41 @@
+﻿@page "/pages/authentication/register"
+@layout LoginLayout
+
+
+<MudText Typo="Typo.h4" GutterBottom="true">Sign Up</MudText>
+<MudText>Already have an account? <MudLink Href="/pages/authentication/login">Sign In</MudLink></MudText>
+
+<MudTextField T="string" Label="Username" Variant="Variant.Outlined" Class="my-4"></MudTextField>
+
+<MudTextField T="string" Label="E-mail" Variant="Variant.Outlined"></MudTextField>
+
+<MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined" InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" Class="mt-4"/>
+
+<MudCheckBox @bind-Checked="@AgreeToTerms" Label="I agree to the terms and privacy" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!AgreeToTerms)" Link="/pages/authentication/login" Size="Size.Large" FullWidth="true">Register</MudButton>
+
+@code {
+    string Password { get; set; }
+    private bool AgreeToTerms { get; set; }
+
+    bool _passwordVisibility;
+    InputType _passwordInput = InputType.Password;
+    string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void TogglePasswordVisibility()
+    {
+        @if (_passwordVisibility)
+        {
+            _passwordVisibility = false;
+            _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
+            _passwordInput = InputType.Password;
+        }
+        else
+        {
+            _passwordVisibility = true;
+            _passwordInputIcon = Icons.Material.Filled.Visibility;
+            _passwordInput = InputType.Text;
+        }
+    }
+}
