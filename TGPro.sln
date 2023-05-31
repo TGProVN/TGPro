@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Identity.Infrastruc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modules.Identity.Core", "src\Modules\Identity\Modules.Identity.Core\Modules.Identity.Core.csproj", "{3A24392E-2ECF-4702-9362-322AC0C07882}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPortal", "src\AdminPortal\AdminPortal.csproj", "{7DC5FDFF-3430-476A-AE96-D289485691BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,7 @@ Global
 		{4B36382F-163E-42B2-8B61-89DD22576574} = {0394DA03-2A28-4795-822A-4E518C7B0B0B}
 		{74F0F53B-50ED-4DF3-89FF-8C83876731E6} = {0394DA03-2A28-4795-822A-4E518C7B0B0B}
 		{3A24392E-2ECF-4702-9362-322AC0C07882} = {0394DA03-2A28-4795-822A-4E518C7B0B0B}
+		{7DC5FDFF-3430-476A-AE96-D289485691BC} = {09F4E823-8206-4D42-9000-72599F0ECF34}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2452D371-98F0-40BB-8963-AA84DDA460C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -104,5 +107,9 @@ Global
 		{3A24392E-2ECF-4702-9362-322AC0C07882}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A24392E-2ECF-4702-9362-322AC0C07882}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A24392E-2ECF-4702-9362-322AC0C07882}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DC5FDFF-3430-476A-AE96-D289485691BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DC5FDFF-3430-476A-AE96-D289485691BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DC5FDFF-3430-476A-AE96-D289485691BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DC5FDFF-3430-476A-AE96-D289485691BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

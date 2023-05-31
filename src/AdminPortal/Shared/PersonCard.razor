@@ -1,0 +1,21 @@
+﻿<MudCard Elevation="0" Square="true" Class="@Class" Style="@Style">
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            <MudAvatar Image="https://res.cloudinary.com/tgproimagecloud/image/upload/v1638705794/TGProV3/users/admin_avatar.jpg"/>
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            <MudText Typo="Typo.body2">Thuong Vo</MudText>
+            <MudText Typo="Typo.caption">Web Owner</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+</MudCard>
+
+@code {
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
+}
