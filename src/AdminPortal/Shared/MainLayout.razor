@@ -62,7 +62,7 @@
             </ChildContent>
         </MudMenu>
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen"
+    <MudDrawer @bind-Open="_isDrawerOpen"
                ClipMode="_userPreference.DrawerClipMode"
                Elevation="_userPreference.DrawerElevation">
         <NavMenu />
@@ -86,8 +86,8 @@
 </MudLayout>
 
 <SettingLayout OnChangeThemeModeClick="@OnThemeModeChange"
-               Open="@_openSetting"
-               OnOpenSettingClick="@OnSettingToggle">
+               OnOpenSettingClick="@OnSettingToggle"
+               Open="@_isOpenSetting">
     <div class="mb-2">
         <MudSelect Dense="true"
                    Label="Drawer Clip Mode"
@@ -143,8 +143,8 @@
 
 
 @code {
-    private bool _openSetting;
-    private bool _drawerOpen = true;
+    private bool _isOpenSetting;
+    private bool _isDrawerOpen = true;
     private bool _isFirstTimeEntry = true;
     private bool _isInitialized;
     private MudThemeProvider _themeProvider = null!;
@@ -184,12 +184,14 @@
             }
 
             await _themeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
+
             StateHasChanged();
         }
 
         if (_isInitialized && _isFirstTimeEntry)
         {
             await SetThemeAsSystemPreference();
+
             StateHasChanged();
         }
     }
@@ -204,18 +206,20 @@
     async Task OnSystemPreferenceChanged(bool newValue)
     {
         _userPreference.DarkMode = newValue;
+
         await UserPreferenceService.SetUserPreference(_userPreference);
+
         StateHasChanged();
     }
 
     void OnSettingToggle()
     {
-        _openSetting = !_openSetting;
+        _isOpenSetting = !_isOpenSetting;
     }
 
     void OnDrawerToggle()
     {
-        _drawerOpen = !_drawerOpen;
+        _isDrawerOpen = !_isDrawerOpen;
     }
 
     async Task OnThemeModeChange(bool isDark)
@@ -230,11 +234,11 @@
         switch (layoutProperty)
         {
             case LayoutProperty.AppBarElevation:
-                _userPreference.AppBarElevation = Convert.ToInt32(value);
+                _userPreference.AppBarElevation = value.ToIntValue();
                 break;
             case LayoutProperty.BorderRadius:
-                _userPreference.BorderRadius = Convert.ToInt32(value);
-                _theme.LayoutProperties.DefaultBorderRadius = $"{value}px";
+                _userPreference.BorderRadius = value.ToIntValue();
+                _theme.LayoutProperties.DefaultBorderRadius = $"{value.ToStringValue()}px";
                 break;
             case LayoutProperty.DrawerClipMode:
                 _userPreference.DrawerClipMode = value switch {
@@ -244,7 +248,7 @@
                     };
                 break;
             case LayoutProperty.DrawerElevation:
-                _userPreference.DrawerElevation = Convert.ToInt32(value);
+                _userPreference.DrawerElevation = value.ToIntValue();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(layoutProperty), layoutProperty, null);
