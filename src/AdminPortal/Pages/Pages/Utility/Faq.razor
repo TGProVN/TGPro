@@ -1,15 +1,35 @@
 ﻿@page "/pages/utility/faq"
 
-<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">FAQ</MudText>
+<MudText Class="mb-4"
+         Color="Color.Primary"
+         Typo="Typo.h5">
+    FAQ
+</MudText>
 <MudGrid>
-    <MudItem xs="12" sm="12" md="10">
-        <MudPaper Elevation="25" Class="px-4 pb-3 mb-8">
-            <MudTextField T="string" Placeholder="Search" DisableUnderLine="true" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search"></MudTextField>
+    <MudItem md="10"
+             sm="12"
+             xs="12">
+        <MudPaper Class="px-4 pb-3 mb-8"
+                  Elevation="25">
+            <MudTextField Adornment="Adornment.End"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          DisableUnderLine="true"
+                          Placeholder="Search"
+                          T="string">
+            </MudTextField>
         </MudPaper>
     </MudItem>
-    <MudItem xs="12" sm="12" md="2"></MudItem>
-    <MudItem xs="12" sm="12" md="10">
-        <MudText Typo="Typo.h6" GutterBottom="true">General</MudText>
+    <MudItem md="2"
+             sm="12"
+             xs="12">
+    </MudItem>
+    <MudItem md="10"
+             sm="12"
+             xs="12">
+        <MudText GutterBottom="true"
+                 Typo="Typo.h6">
+            General
+        </MudText>
         <MudExpansionPanels Elevation="25">
             <MudExpansionPanel Text="How do i install MudBlazor?">
                 <MudText Typo="Typo.body2">Please check the installation instructions <MudLink Href="https://mudblazor.com/getting-started/installation">here</MudLink></MudText>
@@ -28,7 +48,11 @@
             </MudExpansionPanel>
         </MudExpansionPanels>
 
-        <MudText Typo="Typo.h6" GutterBottom="true" Class="mt-8">Licensing</MudText>
+        <MudText Class="mt-8"
+                 GutterBottom="true"
+                 Typo="Typo.h6">
+            Licensing
+        </MudText>
         <MudExpansionPanels Elevation="25">
             <MudExpansionPanel Text="Unlimited">
                 <MudText Typo="Typo.body2">Do what you want, its MIT.</MudText>
@@ -41,7 +65,11 @@
             </MudExpansionPanel>
         </MudExpansionPanels>
 
-        <MudText Typo="Typo.h6" GutterBottom="true" Class="mt-8">Refund Policy</MudText>
+        <MudText Class="mt-8"
+                 GutterBottom="true"
+                 Typo="Typo.h6">
+            Refund Policy
+        </MudText>
         <MudExpansionPanels Elevation="25">
             <MudExpansionPanel Text="Can i refund MudBlazor?">
                 <MudText Typo="Typo.body2">No you cant, since its a open source, MIT project and is free to use.</MudText>
@@ -51,11 +79,28 @@
             </MudExpansionPanel>
         </MudExpansionPanels>
     </MudItem>
-    <MudItem xs="12" sm="12" md="2">
-        <MudText Typo="Typo.h6" GutterBottom="true">Categories</MudText>
-        <MudButton Variant="Variant.Text" Color="Color.Secondary" Class="d-flex">General</MudButton>
-        <MudButton Variant="Variant.Text" Color="Color.Secondary" Class="d-flex">Licenses</MudButton>
-        <MudButton Variant="Variant.Text" Color="Color.Secondary" Class="d-flex">Refund Policy</MudButton>
+    <MudItem md="2"
+             sm="12"
+             xs="12">
+        <MudText GutterBottom="true"
+                 Typo="Typo.h6">
+            Categories
+        </MudText>
+        <MudButton Class="d-flex"
+                   Color="Color.Secondary"
+                   Variant="Variant.Text">
+            General
+        </MudButton>
+        <MudButton Class="d-flex"
+                   Color="Color.Secondary"
+                   Variant="Variant.Text">
+            Licenses
+        </MudButton>
+        <MudButton Class="d-flex"
+                   Color="Color.Secondary"
+                   Variant="Variant.Text">
+            Refund Policy
+        </MudButton>
     </MudItem>
 </MudGrid>
 

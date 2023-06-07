@@ -1,0 +1,87 @@
+﻿<MudDrawer Anchor="Anchor.End"
+           Elevation="1"
+           Open="@Open"
+           Variant="@DrawerVariant.Temporary"
+           Width="270px">
+    <MudDrawerHeader Class="align-center">
+        <MudText Typo="Typo.h6">
+            <b>Settings</b>
+        </MudText>
+        <MudSpacer />
+        <MudIconButton Color="Color.Default"
+                       Icon="@Icons.Material.Filled.Close"
+                       OnClick="@OpenSettingClick"
+                       Size="Size.Small" />
+    </MudDrawerHeader>
+    <MudDivider Class="mb-2"
+                Style="max-height: 1px" />
+    <div class="mt-2">
+        <div class="px-4">
+            <div>
+                <MudGrid Class="my-3"
+                         Spacing="3">
+                    <MudItem xs="6">
+                        <MudButton Class="mode-button"
+                                   FullWidth="true"
+                                   OnClick="@(_ => ChangeTheme(false))"
+                                   Style="background: white;">
+                            <ChildContent>
+                                <MudIcon Color="Color.Primary"
+                                         Icon="@Icons.Material.Filled.WbSunny" />
+                            </ChildContent>
+                        </MudButton>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudButton Class="mode-button"
+                                   FullWidth="true"
+                                   OnClick="@(_ => ChangeTheme(true))"
+                                   Style="background: #333333;">
+                            <ChildContent>
+                                <MudIcon Icon="@Icons.Material.Filled.DarkMode"
+                                         Style="color: #c9c9c9" />
+                            </ChildContent>
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            </div>
+            <div class="theme-manager-section">
+                <MudExpansionPanel @bind-IsExpanded="_openSection"
+                                   HideIcon="true"
+                                   Style="background: var(--mud-palette-drawer-background)">
+                    <TitleContent>
+                        <div class="d-flex">
+                            <MudText>Layout</MudText>
+                            <MudSpacer />
+                            <MudIcon Icon="@(_openSection ? Icons.Material.Filled.ArrowDropUp : Icons.Material.Filled.ArrowDropDown)" />
+                        </div>
+                    </TitleContent>
+                    <ChildContent>
+                        @ChildContent
+                    </ChildContent>
+                </MudExpansionPanel>
+            </div>
+        </div>
+    </div>
+</MudDrawer>
+
+@code {
+
+    [Parameter]
+    public bool Open { get; set; }
+
+    [Parameter]
+    public EventCallback OpenSettingClick { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ChangeThemeModeClick { get; set; }
+
+    private bool _openSection;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    async Task ChangeTheme(bool isDark)
+    {
+        await ChangeThemeModeClick.InvokeAsync(isDark);
+    }
+}
