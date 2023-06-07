@@ -1,0 +1,12 @@
+.mode-button {
+    border: 1px solid var(--mud-palette-table-lines);
+    height: 90px;
+}
+
+.theme-manager-section .mud-expand-panel .mud-expand-panel-header {
+    padding: 0
+}
+
+.theme-manager-section .mud-expand-panel .mud-expand-panel-content {
+    padding: 8px
+}

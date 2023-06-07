@@ -1,12 +1,12 @@
 ﻿using MudBlazor;
 
-namespace AdminPortal.Theme;
+namespace AdminPortal.Models;
 
-public class MudBlazorAdminDashboard : MudTheme
+public class Theme : MudTheme
 {
-    public MudBlazorAdminDashboard()
+    public Theme()
     {
-        Palette = new PaletteLight {
+        Palette = new Palette {
             Primary = Colors.Blue.Darken1,
             Secondary = Colors.DeepPurple.Accent2,
             Background = Colors.Grey.Lighten5,

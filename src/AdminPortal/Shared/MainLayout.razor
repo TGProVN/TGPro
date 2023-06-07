@@ -1,91 +1,155 @@
-﻿@inherits LayoutComponentBase
+﻿@using AdminPortal.Enums
+@inherits LayoutComponentBase
+@inject UserPreferenceService UserPreferenceService;
 
-
-<MudThemeProvider Theme="_themeManager.Theme"/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
+<MudThemeProvider @bind-IsDarkMode="@_userPreference.DarkMode"
+                  @ref="_themeProvider"
+                  Theme="_theme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="4">
+    <MudAppBar Elevation="_userPreference.AppBarElevation">
         <MudHidden Breakpoint="Breakpoint.SmAndDown">
-            <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Size="Size.Large"/>
+            <MudIcon Icon="@Icons.Custom.Brands.MudBlazor"
+                     Size="Size.Large" />
         </MudHidden>
         <MudHidden Breakpoint="Breakpoint.MdAndUp">
-            <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
+            <MudIconButton Color="Color.Inherit"
+                           Edge="Edge.Start"
+                           Icon="@Icons.Material.Outlined.Menu"
+                           OnClick="@((e) => DrawerToggle())" />
         </MudHidden>
         <MudHidden Breakpoint="Breakpoint.Xs">
-            <MudText Typo="Typo.h6" Class="ml-4">Admin Dashboard</MudText>
+            <MudText Class="ml-4"
+                     Typo="Typo.h6">
+                Admin Dashboard
+            </MudText>
         </MudHidden>
-        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+        <MudHidden Breakpoint="Breakpoint.Xs"
+                   Invert="true">
             <MudText Typo="Typo.subtitle2">Admin Dashboard</MudText>
         </MudHidden>
-        <MudSpacer/>
-        <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
+        <MudSpacer />
+        <MudIconButton Color="Color.Inherit"
+                       Icon="@Icons.Material.Outlined.Settings"
+                       OnClick="@SettingToggle">
+        </MudIconButton>
+        <MudMenu Color="Color.Inherit"
+                 Dense="true"
+                 Direction="Direction.Bottom"
+                 Icon="@Icons.Material.Outlined.Translate"
+                 OffsetY="true">
             <MudMenuItem>English</MudMenuItem>
             <MudMenuItem>Tiếng Việt</MudMenuItem>
         </MudMenu>
-        <MudMenu Direction="Direction.Left" OffsetX="true" Dense="true" Class="mt-1 ml-4">
+        <MudMenu Class="mt-1 ml-4"
+                 Dense="true"
+                 Direction="Direction.Left"
+                 OffsetX="true">
             <ActivatorContent>
-                <MudAvatar Image="https://res.cloudinary.com/tgproimagecloud/image/upload/v1638705794/TGProV3/users/admin_avatar.jpg"/>
+                <MudAvatar Image="https://res.cloudinary.com/tgproimagecloud/image/upload/v1638705794/TGProV3/users/admin_avatar.jpg" />
             </ActivatorContent>
             <ChildContent>
-                <PersonCard Class="mt-n2"/>
-                <MudDivider Class="mb-2"/>
-                <MudListItem Text="Account" Icon="@Icons.Material.Outlined.Person" Href="/personal/account"/>
-                <MudListItem Text="Logout" Icon="@Icons.Material.Outlined.Login" Href="/pages/authentication/login"/>
+                <PersonCard Class="mt-n2" />
+                <MudDivider Class="mb-2" />
+                <MudListItem Href="/personal/account"
+                             Icon="@Icons.Material.Outlined.Person"
+                             Text="Account" />
+                <MudListItem Href="/pages/authentication/login"
+                             Icon="@Icons.Material.Outlined.Login"
+                             Text="Logout" />
             </ChildContent>
         </MudMenu>
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="_themeManager.DrawerClipMode">
-        <NavMenu/>
+    <MudDrawer @bind-Open="_drawerOpen"
+               ClipMode="_userPreference.DrawerClipMode"
+               Elevation="_userPreference.DrawerElevation">
+        <NavMenu />
     </MudDrawer>
     <MudMainContent>
         <MudHidden Breakpoint="Breakpoint.SmAndDown">
             <MudToolBar DisableGutters="true">
-                <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())" Class="ml-3"/>
+                <MudIconButton Class="ml-3"
+                               Color="Color.Inherit"
+                               Icon="@Icons.Material.Outlined.Menu"
+                               OnClick="@DrawerToggle" />
                 <MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-                <MudSpacer/>
+                <MudSpacer />
             </MudToolBar>
         </MudHidden>
-        <MudContainer MaxWidth="MaxWidth.False" Class="mt-4">
+        <MudContainer Class="mt-4"
+                      MaxWidth="MaxWidth.False">
             @Body
         </MudContainer>
     </MudMainContent>
 </MudLayout>
 
-<MudThemeManagerButton OnClick="@((e) => OpenThemeManager(true))"/>
-<MudThemeManager Open="_themeManagerOpen" OpenChanged="OpenThemeManager" Theme="_themeManager" ThemeChanged="UpdateTheme"/>
+<SettingLayout ChangeThemeModeClick="@ToggleTheme"
+               Open="@_openSetting"
+               OpenSettingClick="@SettingToggle">
+    <div class="mb-2">
+        <MudSelect Dense="true"
+                   Label="Drawer Clip Mode"
+                   T="string"
+                   Value="_userPreference.DrawerClipMode.ToString()"
+                   ValueChanged="@(newValue => LayoutChange(newValue, LayoutProperty.DrawerClipMode))"
+                   Variant="Variant.Outlined">
+            <MudSelectItem Value="@(DrawerClipMode.Always.ToString())" />
+            <MudSelectItem Value="@(DrawerClipMode.Docked.ToString())" />
+            <MudSelectItem Value="@(DrawerClipMode.Never.ToString())" />
+        </MudSelect>
+    </div>
+    <div class="mb-2">
+        <MudSlider Max="25"
+                   Min="0"
+                   Step="1"
+                   T="int"
+                   Value="@_userPreference.BorderRadius"
+                   ValueChanged="@(newValue => LayoutChange(newValue, LayoutProperty.BorderRadius))">
+            <MudText Class="mb-2"
+                     Typo="Typo.body2">
+                Border Radius: <b>@($"{_userPreference.BorderRadius}px")</b>
+            </MudText>
+        </MudSlider>
+    </div>
+    <div class="mb-2">
+        <MudSlider Max="24"
+                   Min="0"
+                   Step="1"
+                   T="int"
+                   Value="@_userPreference.AppBarElevation"
+                   ValueChanged="@(newValue => LayoutChange(newValue, LayoutProperty.AppBarElevation))">
+            <MudText Class="mb-2"
+                     Typo="Typo.body2">
+                AppBar Elevation: <b>@($"{_userPreference.AppBarElevation}")</b>
+            </MudText>
+        </MudSlider>
+    </div>
+    <div class="mb-2">
+        <MudSlider Max="24"
+                   Min="0"
+                   Step="1"
+                   T="int"
+                   Value="@_userPreference.DrawerElevation"
+                   ValueChanged="@(newValue => LayoutChange(newValue, LayoutProperty.DrawerElevation))">
+            <MudText Class="mb-2"
+                     Typo="Typo.body2">
+                Drawer Elevation: <b>@($"{_userPreference.DrawerElevation}")</b>
+            </MudText>
+        </MudSlider>
+    </div>
+</SettingLayout>
 
 
 @code {
-    private ThemeManagerTheme _themeManager = new();
-
+    private bool _openSetting;
     private bool _drawerOpen = true;
-    private bool _themeManagerOpen;
-
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-
-    void OpenThemeManager(bool value)
-    {
-        _themeManagerOpen = value;
-    }
-
-    void UpdateTheme(ThemeManagerTheme value)
-    {
-        _themeManager = value;
-        StateHasChanged();
-    }
-
-    protected override void OnInitialized()
-    {
-        _themeManager.Theme = new MudBlazorAdminDashboard();
-        _themeManager.DrawerClipMode = DrawerClipMode.Always;
-        _themeManager.FontFamily = "Montserrat";
-        _themeManager.DefaultBorderRadius = 3;
-    }
+    private bool _isFirstTimeEntry = true;
+    private bool _isInitialized;
+    private MudThemeProvider _themeProvider = null!;
+    private readonly UserPreference _userPreference = new();
+    private readonly MudTheme _theme = new Theme();
 
     private readonly List<BreadcrumbItem> _items = new()
     {
@@ -93,4 +157,99 @@
         new BreadcrumbItem("Dashboard", "#")
     };
 
+    protected override async Task OnInitializedAsync()
+    {
+        var currentUserPreference = await UserPreferenceService.GetUserPreference();
+
+        if (currentUserPreference is not null)
+        {
+            _isFirstTimeEntry = false;
+            _userPreference.AppBarElevation = currentUserPreference.AppBarElevation;
+            _userPreference.BorderRadius = currentUserPreference.BorderRadius;
+            _userPreference.DarkMode = currentUserPreference.DarkMode;
+            _userPreference.DrawerClipMode = currentUserPreference.DrawerClipMode;
+            _userPreference.DrawerElevation = currentUserPreference.DrawerElevation;
+        }
+
+        _isInitialized = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (_isInitialized && _isFirstTimeEntry)
+            {
+                await SetThemeAsSystemPreference();
+            }
+
+            await _themeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
+            StateHasChanged();
+        }
+
+        if (_isInitialized && _isFirstTimeEntry)
+        {
+            await SetThemeAsSystemPreference();
+            StateHasChanged();
+        }
+    }
+
+    async Task SetThemeAsSystemPreference()
+    {
+        _isFirstTimeEntry = !_isFirstTimeEntry;
+        _userPreference.DarkMode = await _themeProvider.GetSystemPreference();
+        await UserPreferenceService.SetUserPreference(_userPreference);
+    }
+
+    async Task OnSystemPreferenceChanged(bool newValue)
+    {
+        _userPreference.DarkMode = newValue;
+        await UserPreferenceService.SetUserPreference(_userPreference);
+        StateHasChanged();
+    }
+
+    void SettingToggle()
+    {
+        _openSetting = !_openSetting;
+    }
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    async Task ToggleTheme(bool isDark)
+    {
+        _userPreference.DarkMode = isDark;
+
+        await UserPreferenceService.SetUserPreference(_userPreference);
+    }
+
+    async Task LayoutChange<T>(T value, LayoutProperty layoutProperty)
+    {
+        switch (layoutProperty)
+        {
+            case LayoutProperty.AppBarElevation:
+                _userPreference.AppBarElevation = Convert.ToInt32(value);
+                break;
+            case LayoutProperty.BorderRadius:
+                _userPreference.BorderRadius = Convert.ToInt32(value);
+                _theme.LayoutProperties.DefaultBorderRadius = $"{value}px";
+                break;
+            case LayoutProperty.DrawerClipMode:
+                _userPreference.DrawerClipMode = value switch {
+                    "Always" => DrawerClipMode.Always,
+                    "Docked" => DrawerClipMode.Docked,
+                    _ => DrawerClipMode.Never
+                    };
+                break;
+            case LayoutProperty.DrawerElevation:
+                _userPreference.DrawerElevation = Convert.ToInt32(value);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(layoutProperty), layoutProperty, null);
+        }
+
+        await UserPreferenceService.SetUserPreference(_userPreference);
+    }
 }

@@ -2,11 +2,28 @@
 @layout LoginLayout
 
 
-<MudText Typo="Typo.h4" GutterBottom="true">Set new password</MudText>
+<MudText GutterBottom="true"
+         Typo="Typo.h4">
+    Set new password
+</MudText>
 
-<MudTextField @bind-Value="@Password" Label="New Password" Variant="Variant.Outlined" InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" Class="my-4"/>
+<MudTextField Adornment="Adornment.End"
+              AdornmentIcon="@_passwordInputIcon"
+              @bind-Value="@Password"
+              Class="my-4"
+              InputType="@_passwordInput"
+              Label="New Password"
+              OnAdornmentClick="TogglePasswordVisibility"
+              Variant="Variant.Outlined" />
 
-<MudButton Variant="Variant.Filled" Color="Color.Primary" Link="/pages/authentication/login" Size="Size.Large" FullWidth="true" Class="mt-2">Set New Password</MudButton>
+<MudButton Class="mt-2"
+           Color="Color.Primary"
+           FullWidth="true"
+           Link="/pages/authentication/login"
+           Size="Size.Large"
+           Variant="Variant.Filled">
+    Set New Password
+</MudButton>
 
 @code {
     string Password { get; set; }

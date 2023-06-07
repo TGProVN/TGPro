@@ -2,41 +2,77 @@
 @inject NavigationManager navigationManager
 
 <MudHidden Breakpoint="Breakpoint.SmAndDown">
-    <MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Email Application</MudText>
+    <MudText Class="mb-4"
+             Color="Color.Primary"
+             Typo="Typo.h5">
+        Email Application
+    </MudText>
 </MudHidden>
 <MudHidden Breakpoint="Breakpoint.MdAndUp">
-    <MudPaper Elevation="25" Class="d-flex align-center py-1 mb-4">
-        <MudIconButton OnClick="@(OpenDrawer)" Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Class="ml-3 mr-2"/>
-        <MudText Typo="Typo.h6" Color="Color.Primary">Email Application</MudText>
+    <MudPaper Class="d-flex align-center py-1 mb-4"
+              Elevation="25">
+        <MudIconButton Class="ml-3 mr-2"
+                       Color="Color.Inherit"
+                       Icon="@Icons.Material.Outlined.Menu"
+                       OnClick="@(OpenDrawer)" />
+        <MudText Color="Color.Primary"
+                 Typo="Typo.h6">
+            Email Application
+        </MudText>
     </MudPaper>
 </MudHidden>
 <div class="d-flex flex-grow-1 flex-row">
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
-        <MudPaper Elevation="25" Class="px-3 py-6 mr-6" MinWidth="250px">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="my-2" FullWidth="true">Compose</MudButton>
-            <EmailNavList folder="@Folder"/>
+        <MudPaper Class="px-3 py-6 mr-6"
+                  Elevation="25"
+                  MinWidth="250px">
+            <MudButton Class="my-2"
+                       Color="Color.Primary"
+                       FullWidth="true"
+                       Size="Size.Large"
+                       Variant="Variant.Filled">
+                Compose
+            </MudButton>
+            <EmailNavList folder="@Folder" />
         </MudPaper>
     </MudHidden>
-    <MudPaper Elevation="25" Class="py-4 flex-grow-1">
-        <MudToolBar Dense="true" DisableGutters="true">
-            <MudCheckBox T="bool" Label="Select All" Class="ml-2"/>
-            <MudSpacer/>
-            <MudIconButton Icon="@Icons.Material.Outlined.NavigateBefore" Class="mx-2"/>
-            <MudIconButton Icon="@Icons.Material.Outlined.NavigateNext" Class="mr-4"/>
+    <MudPaper Class="py-4 flex-grow-1"
+              Elevation="25">
+        <MudToolBar Dense="true"
+                    DisableGutters="true">
+            <MudCheckBox Class="ml-2"
+                         Label="Select All"
+                         T="bool" />
+            <MudSpacer />
+            <MudIconButton Class="mx-2"
+                           Icon="@Icons.Material.Outlined.NavigateBefore" />
+            <MudIconButton Class="mr-4"
+                           Icon="@Icons.Material.Outlined.NavigateNext" />
         </MudToolBar>
         @if (Folder == "inbox")
         {
-            <Inbox/>
+            <Inbox />
         }
         else
         {
-            <MudText Align="Align.Center" Class="mt-16">No Emails :(</MudText>
+            <MudText Align="Align.Center"
+                     Class="mt-16">
+                No Emails :(
+            </MudText>
         }
     </MudPaper>
 </div>
-<MudDrawer @bind-Open="@_open" Anchor="@Anchor.Left" Elevation="1" Variant="@DrawerVariant.Temporary">
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="mx-4 mt-6 mb-4">Compose</MudButton>
-    <EmailNavList folder="@Folder"/>
+<MudDrawer Anchor="@Anchor.Left"
+           @bind-Open="@_open"
+           Elevation="1"
+           Variant="@DrawerVariant.Temporary">
+    <MudButton Class="mx-4 mt-6 mb-4"
+               Color="Color.Primary"
+               Size="Size.Large"
+               Variant="Variant.Filled">
+        Compose
+    </MudButton>
+    <EmailNavList folder="@Folder" />
 </MudDrawer>
 
 

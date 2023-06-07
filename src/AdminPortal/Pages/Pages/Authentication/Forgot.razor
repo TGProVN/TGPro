@@ -2,13 +2,27 @@
 @layout LoginLayout
 
 
-<MudText Typo="Typo.h4" GutterBottom="true">Forgot Password?</MudText>
+<MudText GutterBottom="true"
+         Typo="Typo.h4">
+    Forgot Password?
+</MudText>
 
 <MudText Typo="Typo.subtitle2">Enter the email address linked to your account and you will receive an email containing a link to reset your password.</MudText>
 
-<MudTextField T="string" Label="E-mail" Variant="Variant.Outlined" Class="my-4"></MudTextField>
+<MudTextField Class="my-4"
+              Label="E-mail"
+              T="string"
+              Variant="Variant.Outlined">
+</MudTextField>
 
-<MudButton Variant="Variant.Filled" Color="Color.Primary" Link="/pages/authentication/reset-password" Size="Size.Large" FullWidth="true" Class="mt-3">Reset Password</MudButton>
+<MudButton Class="mt-3"
+           Color="Color.Primary"
+           FullWidth="true"
+           Link="/pages/authentication/reset-password"
+           Size="Size.Large"
+           Variant="Variant.Filled">
+    Reset Password
+</MudButton>
 
 
 @code {
