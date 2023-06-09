@@ -10,7 +10,7 @@
         <MudSpacer />
         <MudIconButton Color="Color.Default"
                        Icon="@Icons.Material.Filled.Close"
-                       OnClick="@OpenSettingClick"
+                       OnClick="@OnOpenSettingClick"
                        Size="Size.Small" />
     </MudDrawerHeader>
     <MudDivider Class="mb-2"
@@ -23,7 +23,7 @@
                     <MudItem xs="6">
                         <MudButton Class="mode-button"
                                    FullWidth="true"
-                                   OnClick="@(_ => ChangeTheme(false))"
+                                   OnClick="@(_ => OnThemeChange(false))"
                                    Style="background: white;">
                             <ChildContent>
                                 <MudIcon Color="Color.Primary"
@@ -34,7 +34,7 @@
                     <MudItem xs="6">
                         <MudButton Class="mode-button"
                                    FullWidth="true"
-                                   OnClick="@(_ => ChangeTheme(true))"
+                                   OnClick="@(_ => OnThemeChange(true))"
                                    Style="background: #333333;">
                             <ChildContent>
                                 <MudIcon Icon="@Icons.Material.Filled.DarkMode"
@@ -47,7 +47,7 @@
             <div class="theme-manager-section">
                 <MudExpansionPanel @bind-IsExpanded="_openSection"
                                    HideIcon="true"
-                                   Style="background: var(--mud-palette-drawer-background)">
+                                   Style="@MudExpansionPanelStyle">
                     <TitleContent>
                         <div class="d-flex">
                             <MudText>Layout</MudText>
@@ -63,25 +63,3 @@
         </div>
     </div>
 </MudDrawer>
-
-@code {
-
-    [Parameter]
-    public bool Open { get; set; }
-
-    [Parameter]
-    public EventCallback OpenSettingClick { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> ChangeThemeModeClick { get; set; }
-
-    private bool _openSection;
-
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
-
-    async Task ChangeTheme(bool isDark)
-    {
-        await ChangeThemeModeClick.InvokeAsync(isDark);
-    }
-}

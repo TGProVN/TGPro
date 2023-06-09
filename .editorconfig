@@ -64,6 +64,12 @@ resharper_align_multiline_extends_list = true
 resharper_align_multiline_parameter = true
 resharper_align_multiple_declaration = true
 resharper_align_multline_type_parameter_constrains = true
+resharper_xmldoc_attribute_indent = align_by_first_attribute
+resharper_xmldoc_attribute_style = first_attribute_on_single_line
+
+# Microsoft .NET properties
+csharp_indent_braces = false
+csharp_new_line_before_open_brace = accessors, anonymous_methods, control_blocks, events, indexers, lambdas, local_functions, methods, properties, types
 
 # Json files
 [*.json]
