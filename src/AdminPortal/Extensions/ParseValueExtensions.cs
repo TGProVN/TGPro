@@ -1,6 +1,6 @@
 ﻿namespace AdminPortal.Extensions;
 
-public static class ParseValue
+public static class ParseValueExtensions
 {
     public static int ToIntValue<T>(this T value)
     {

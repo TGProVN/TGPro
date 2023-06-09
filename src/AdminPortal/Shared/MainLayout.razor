@@ -88,7 +88,7 @@
 <SettingLayout OnChangeThemeModeClick="@OnThemeModeChange"
                OnOpenSettingClick="@OnSettingToggle"
                Open="@_isOpenSetting">
-    <div class="mb-2">
+    <div class="mb-3">
         <MudSelect Dense="true"
                    Label="Drawer Clip Mode"
                    T="string"
@@ -98,6 +98,20 @@
             <MudSelectItem Value="@(DrawerClipMode.Always.ToString())" />
             <MudSelectItem Value="@(DrawerClipMode.Docked.ToString())" />
             <MudSelectItem Value="@(DrawerClipMode.Never.ToString())" />
+        </MudSelect>
+    </div>
+    <div class="mb-3">
+        <MudSelect Dense="true"
+                   Label="Font"
+                   T="string"
+                   Value="_userPreference.Font"
+                   ValueChanged="@OnFontChange"
+                   Variant="Variant.Outlined">
+            @foreach (var font in _lstFont)
+            {
+                <MudSelectItem T="string"
+                               Value="@font" />
+            }
         </MudSelect>
     </div>
     <div class="mb-2">
@@ -140,120 +154,3 @@
         </MudSlider>
     </div>
 </SettingLayout>
-
-
-@code {
-    private bool _isOpenSetting;
-    private bool _isDrawerOpen = true;
-    private bool _isFirstTimeEntry = true;
-    private bool _isInitialized;
-    private MudThemeProvider _themeProvider = null!;
-    private readonly UserPreference _userPreference = new();
-    private readonly MudTheme _theme = new Theme();
-
-    private readonly List<BreadcrumbItem> _items = new()
-    {
-        new BreadcrumbItem("Personal", "#"),
-        new BreadcrumbItem("Dashboard", "#")
-    };
-
-    protected override async Task OnInitializedAsync()
-    {
-        var currentUserPreference = await UserPreferenceService.GetUserPreference();
-
-        if (currentUserPreference is not null)
-        {
-            _isFirstTimeEntry = false;
-            _userPreference.AppBarElevation = currentUserPreference.AppBarElevation;
-            _userPreference.BorderRadius = currentUserPreference.BorderRadius;
-            _userPreference.DarkMode = currentUserPreference.DarkMode;
-            _userPreference.DrawerClipMode = currentUserPreference.DrawerClipMode;
-            _userPreference.DrawerElevation = currentUserPreference.DrawerElevation;
-        }
-
-        _isInitialized = true;
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            if (_isInitialized && _isFirstTimeEntry)
-            {
-                await SetThemeAsSystemPreference();
-            }
-
-            await _themeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
-
-            StateHasChanged();
-        }
-
-        if (_isInitialized && _isFirstTimeEntry)
-        {
-            await SetThemeAsSystemPreference();
-
-            StateHasChanged();
-        }
-    }
-
-    async Task SetThemeAsSystemPreference()
-    {
-        _isFirstTimeEntry = !_isFirstTimeEntry;
-        _userPreference.DarkMode = await _themeProvider.GetSystemPreference();
-        await UserPreferenceService.SetUserPreference(_userPreference);
-    }
-
-    async Task OnSystemPreferenceChanged(bool newValue)
-    {
-        _userPreference.DarkMode = newValue;
-
-        await UserPreferenceService.SetUserPreference(_userPreference);
-
-        StateHasChanged();
-    }
-
-    void OnSettingToggle()
-    {
-        _isOpenSetting = !_isOpenSetting;
-    }
-
-    void OnDrawerToggle()
-    {
-        _isDrawerOpen = !_isDrawerOpen;
-    }
-
-    async Task OnThemeModeChange(bool isDark)
-    {
-        _userPreference.DarkMode = isDark;
-
-        await UserPreferenceService.SetUserPreference(_userPreference);
-    }
-
-    async Task OnLayoutChange<T>(T value, LayoutProperty layoutProperty)
-    {
-        switch (layoutProperty)
-        {
-            case LayoutProperty.AppBarElevation:
-                _userPreference.AppBarElevation = value.ToIntValue();
-                break;
-            case LayoutProperty.BorderRadius:
-                _userPreference.BorderRadius = value.ToIntValue();
-                _theme.LayoutProperties.DefaultBorderRadius = $"{value.ToStringValue()}px";
-                break;
-            case LayoutProperty.DrawerClipMode:
-                _userPreference.DrawerClipMode = value switch {
-                    "Always" => DrawerClipMode.Always,
-                    "Docked" => DrawerClipMode.Docked,
-                    _ => DrawerClipMode.Never
-                    };
-                break;
-            case LayoutProperty.DrawerElevation:
-                _userPreference.DrawerElevation = value.ToIntValue();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(layoutProperty), layoutProperty, null);
-        }
-
-        await UserPreferenceService.SetUserPreference(_userPreference);
-    }
-}

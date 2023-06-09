@@ -47,7 +47,7 @@
             <div class="theme-manager-section">
                 <MudExpansionPanel @bind-IsExpanded="_openSection"
                                    HideIcon="true"
-                                   Style="background: var(--mud-palette-drawer-background)">
+                                   Style="@MudExpansionPanelStyle">
                     <TitleContent>
                         <div class="d-flex">
                             <MudText>Layout</MudText>
@@ -63,25 +63,3 @@
         </div>
     </div>
 </MudDrawer>
-
-@code {
-
-    [Parameter]
-    public bool Open { get; set; }
-
-    [Parameter]
-    public EventCallback OnOpenSettingClick { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> OnChangeThemeModeClick { get; set; }
-
-    private bool _openSection;
-
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
-
-    async Task OnThemeChange(bool isDark)
-    {
-        await OnChangeThemeModeClick.InvokeAsync(isDark);
-    }
-}
